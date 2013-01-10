@@ -4,7 +4,6 @@
  *  Copyright notice
  *
  *  (c) 2012 Daniel Hürtgen <huertgen@rheinschafe.de>, Rheinschafe GmbH
- *  Kai Lehmkühler <lehmkuehler@rheinschafe.de>, Rheinschafe GmbH
  *
  *  All rights reserved
  *
@@ -24,29 +23,16 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
 /**
- * Configuration of the rs_pagegenlock package.
+ * MySQL-Locking-Driver class.
+ *  Main locking method: mysql table
  *
  * @package    rs_lock
+ * @subpackage Locking/Driver
  * @license    http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * @author     Daniel Hürtgen <huertgen@rheinschafe.de>
  */
+class Tx_RsLock_Locking_Driver_MySQLDriver extends Tx_RsLock_Locking_Driver_AbstractDriver
+	implements Tx_RsLock_Locking_Driver_DriverInterface {
 
-// access restriction
-if (!defined('TYPO3_MODE')) {
-	die ('Access denied.');
 }
-
-// X-Class implementation for t3lib_lock class (ux_t3lib_lock)
-$GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['t3lib/class.t3lib_lock.php'] = t3lib_extMgm::extPath(
-	$_EXTKEY, 'Classes/Legacy/class.ux_t3lib_lock.php'
-);
-
-// basic driver mapping
-$GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$_EXTKEY]['driverMapping'] = array(
-	'simple'    => 'Tx_RsLock_Locking_Driver_FileDriver',
-	'file'      => 'Tx_RsLock_Locking_Driver_FileDriver',
-	'flock'     => 'Tx_RsLock_Locking_Driver_FileFlockDriver',
-	'semaphore' => 'Tx_RsLock_Locking_Driver_SemaphoreDriver',
-	'mysql'     => 'Tx_RsLock_Locking_Driver_MysqlDriver',
-);

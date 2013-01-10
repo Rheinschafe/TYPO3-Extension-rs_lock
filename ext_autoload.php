@@ -14,6 +14,7 @@ return array(
 	'tx_rslock_locking_driver_driverinterface' => $extensionClassesPath . 'Locking/Driver/DriverInterface.php',
 	'tx_rslock_locking_driver_filedriver' => $extensionClassesPath . 'Locking/Driver/FileDriver.php',
 	'tx_rslock_locking_driver_fileflockdriver' => $extensionClassesPath . 'Locking/Driver/FileFlockDriver.php',
+	'tx_rslock_locking_driver_mysqldriver' => $extensionClassesPath . 'Locking/Driver/MySQLDriver.php',
 	'tx_rslock_locking_driver_semaphoredriver' => $extensionClassesPath . 'Locking/Driver/SemaphoreDriver.php',
 );
 ?>
