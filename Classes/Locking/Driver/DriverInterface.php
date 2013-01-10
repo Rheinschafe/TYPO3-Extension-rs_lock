@@ -33,4 +33,48 @@
  */
 interface Tx_RsLock_Locking_Driver_DriverInterface {
 
+	/**
+	 * Constructor.
+	 *
+	 * @param string   $id
+	 * @param int|null $loops
+	 * @param int|null $steps
+	 * @return Tx_RsLock_Locking_Driver_DriverInterface
+	 */
+	public function __construct($id, $loops = NULL, $steps = NULL);
+
+	/**
+	 * Acquire lock.
+	 *
+	 * @return boolean
+	 */
+	public function acquire();
+
+	/**
+	 * Release lock.
+	 *
+	 * @return boolean
+	 */
+	public function release();
+
+	/**
+	 * Is lock aquired?
+	 *
+	 * @return boolean
+	 */
+	public function isAcquired();
+
+	/**
+	 * Perform shutdown tasks.
+	 *
+	 * @return void
+	 */
+	public function shutdown();
+
+	/**
+	 * Returns string with driver name.
+	 *
+	 * @return string
+	 */
+	public function getType();
 }
