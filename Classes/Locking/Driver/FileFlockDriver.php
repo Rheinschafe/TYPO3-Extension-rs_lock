@@ -32,7 +32,7 @@
  * @license    http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @author     Daniel Hürtgen <huertgen@rheinschafe.de>
  */
-class Tx_RsLock_Locking_Driver_FlockDriver extends Tx_RsLock_Locking_Driver_AbstractTypo3Driver {
+class Tx_RsLock_Locking_Driver_FileFlockDriver extends Tx_RsLock_Locking_Driver_AbstractTypo3Driver {
 
 	/**
 	 * Constructor.
@@ -40,7 +40,7 @@ class Tx_RsLock_Locking_Driver_FlockDriver extends Tx_RsLock_Locking_Driver_Abst
 	 * @param mixed    $id
 	 * @param int|null $loops
 	 * @param int|null $step
-	 * @return Tx_RsLock_Locking_Driver_FlockDriver
+	 * @return Tx_RsLock_Locking_Driver_FileFlockDriver
 	 */
 	public function __construct($id, $loops = NULL, $step = NULL) {
 		// set fixed method
