@@ -25,12 +25,13 @@
  ***************************************************************/
 /**
  * Locker wrapper class.
+ *  Extends t3lib_lock to fit 'instanceof' method.
  *
  * @package    rs_lock
- * @subpackage Legacy
+ * @subpackage Locking
  * @license    http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @author     Daniel Hürtgen <huertgen@rheinschafe.de>
  */
-class Tx_RsLock_Locking_Locker {
+class Tx_RsLock_Locking_Locker extends t3lib_lock {
 
 }
