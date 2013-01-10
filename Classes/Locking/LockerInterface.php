@@ -33,4 +33,25 @@
  */
 interface Tx_RsPagegenlock_Locking_LockerInterface {
 
+	public function __construct($id, $method = '', $loops = 0, $step = 0);
+
+	public function __destruct();
+
+	public function acquire();
+
+	public function release();
+
+	public function getMethod();
+
+	public function getId();
+
+	public function getResource();
+
+	public function getLockStatus();
+
+	public function setSyslogFacility($syslogFacility);
+
+	public function setEnableLogging($isLoggingEnabled);
+
+	public function sysLog($message, $severity = 0);
 }
