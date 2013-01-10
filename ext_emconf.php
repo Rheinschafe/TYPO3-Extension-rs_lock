@@ -13,7 +13,7 @@
 $EM_CONF[$_EXTKEY] = array(
 	'title'                         => 'RS | Advanced Page Generation Locking',
 	'description'                   => '',
-	'category'                      => 'plugin',
+	'category'                      => 'fe',
 	'author'                        => 'Daniel Hürtgen, Kai Lehmkühler, Florian in der Beek, Julian Scheidsteger',
 	'author_email'                  => 'huertgen@rheinschafe.de, lehmkuehler@rheinschafe.de, inderbeek@rheinschafe.de, scheidsteger@rheinschafe.de',
 	'author_company'                => 'Rheinschafe GmbH, Rheinschafe GmbH, Rheinschafe GmbH, Rheinschafe GmbH',
