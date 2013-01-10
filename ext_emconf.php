@@ -1,7 +1,7 @@
 <?php
 
 /***************************************************************
- * Extension Manager/Repository config file for ext "rs_pagegenlock".
+ * Extension Manager/Repository config file for ext "rs_lock".
  *
  * Auto generated 10-01-2013 10:16
  *
@@ -11,7 +11,7 @@
  ***************************************************************/
 
 $EM_CONF[$_EXTKEY] = array(
-	'title'                         => 'RS | Advanced Page Generation Locking',
+	'title'                         => 'RS | Advanced Locking',
 	'description'                   => '',
 	'category'                      => 'fe',
 	'author'                        => 'Daniel Hürtgen',

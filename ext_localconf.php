@@ -28,7 +28,7 @@
 /**
  * Configuration of the rs_pagegenlock package.
  *
- * @package    rs_pagegenlock
+ * @package    rs_lock
  * @license    http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 

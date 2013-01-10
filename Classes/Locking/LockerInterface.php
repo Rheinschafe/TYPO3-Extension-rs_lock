@@ -26,12 +26,12 @@
 /**
  * Locker interface.
  *
- * @package    rs_pagegenlock
+ * @package    rs_lock
  * @subpackage Locking
  * @license    http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @author     Daniel Hürtgen <huertgen@rheinschafe.de>
  */
-interface Tx_RsPagegenlock_Locking_LockerInterface {
+interface Tx_RsLock_Locking_LockerInterface {
 
 	public function __construct($id, $method = '', $loops = 0, $step = 0);
 

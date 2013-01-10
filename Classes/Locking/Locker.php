@@ -26,11 +26,11 @@
 /**
  * Locker wrapper class.
  *
- * @package    rs_pagegenlock
+ * @package    rs_lock
  * @subpackage Legacy
  * @license    http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @author     Daniel Hürtgen <huertgen@rheinschafe.de>
  */
-class Tx_RsPagegenlock_Locking_Locker {
+class Tx_RsLock_Locking_Locker {
 
 }

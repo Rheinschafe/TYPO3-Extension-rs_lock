@@ -26,11 +26,11 @@
 /**
  * Locking-Driver interface.
  *
- * @package    rs_pagegenlock
+ * @package    rs_lock
  * @subpackage Locking/Driver
  * @license    http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @author     Daniel Hürtgen <huertgen@rheinschafe.de>
  */
-interface Tx_RsPagegenlock_Locking_Driver_DriverInterface {
+interface Tx_RsLock_Locking_Driver_DriverInterface {
 
 }
