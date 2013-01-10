@@ -24,23 +24,47 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 /**
- * Locking-Driver interface.
+ * Locking-Driver-API interface.
  *
  * @package    rs_lock
  * @subpackage Locking/Driver
  * @license    http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @author     Daniel Hürtgen <huertgen@rheinschafe.de>
  */
-interface Tx_RsLock_Locking_Driver_DriverInterface extends Tx_RsLock_Locking_Driver_DriverApiInterface {
+interface Tx_RsLock_Locking_Driver_DriverApiInterface {
 
 	/**
-	 * Constructor.
+	 * Acquire lock.
 	 *
-	 * @param string   $id
-	 * @param int|null $loops
-	 * @param int|null $steps
-	 * @return Tx_RsLock_Locking_Driver_DriverInterface
+	 * @return boolean
 	 */
-	public function __construct($id, $loops = NULL, $steps = NULL);
+	public function acquire();
 
+	/**
+	 * Release lock.
+	 *
+	 * @return boolean
+	 */
+	public function release();
+
+	/**
+	 * Is lock aquired?
+	 *
+	 * @return boolean
+	 */
+	public function isAcquired();
+
+	/**
+	 * Perform shutdown tasks.
+	 *
+	 * @return void
+	 */
+	public function shutdown();
+
+	/**
+	 * Returns string with driver name.
+	 *
+	 * @return string
+	 */
+	public function getType();
 }
