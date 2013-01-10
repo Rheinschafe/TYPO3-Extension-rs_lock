@@ -41,3 +41,11 @@ if (!defined('TYPO3_MODE')) {
 $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['t3lib/class.t3lib_lock.php'] = t3lib_extMgm::extPath(
 	$_EXTKEY, 'Classes/Legacy/class.ux_t3lib_lock.php'
 );
+
+// basic driver mapping
+$GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$_EXTKEY]['driverMapping'] = array(
+	'simple'    => 'Tx_RsLock_Locking_Driver_FileDriver',
+	'file'      => 'Tx_RsLock_Locking_Driver_FileDriver',
+	'flock'     => 'Tx_RsLock_Locking_Driver_FileFlockDriver',
+	'semaphore' => 'Tx_RsLock_Locking_Driver_SemaphoreDriver',
+);
