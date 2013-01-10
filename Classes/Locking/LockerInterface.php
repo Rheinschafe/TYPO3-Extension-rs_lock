@@ -31,27 +31,31 @@
  * @license    http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @author     Daniel Hürtgen <huertgen@rheinschafe.de>
  */
-interface Tx_RsLock_Locking_LockerInterface {
+interface Tx_RsLock_Locking_LockerInterface extends Tx_RsLock_Locking_Driver_DriverApiInterface {
 
-	public function __construct($id, $method = '', $loops = 0, $step = 0);
+	/**
+	 * Constructor.
+	 *
+	 * @param mixed                                           $id     Unique id used for locking.
+	 * @param string|Tx_RsLock_Locking_Driver_DrvierInterface $driver Driver class object or string.
+	 * @param null                                            $loops  Times a lock is tried to acuqire.
+	 * @param null                                            $steps  Milliseconds to sleep between looping.
+	 * @return Tx_RsLock_Locking_LockerInterface
+	 */
+	public function __construct($id, $driver, $loops = NULL, $steps = NULL);
 
+	/**
+	 * Destructor.
+	 * Perform shutdown tasks.
+	 *
+	 * @return void
+	 */
 	public function __destruct();
 
-	public function acquire();
-
-	public function release();
-
-	public function getMethod();
-
-	public function getId();
-
-	public function getResource();
-
-	public function getLockStatus();
-
-	public function setSyslogFacility($syslogFacility);
-
-	public function setEnableLogging($isLoggingEnabled);
-
-	public function sysLog($message, $severity = 0);
+	/**
+	 * Get driver.
+	 *
+	 * @return Tx_RsLock_Locking_Driver_DriverInterface
+	 */
+	public function getDriver();
 }
