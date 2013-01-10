@@ -43,4 +43,11 @@ interface Tx_RsLock_Locking_Driver_DriverInterface extends Tx_RsLock_Locking_Dri
 	 */
 	public function __construct($id, $loops = NULL, $steps = NULL);
 
+	/**
+	 * Perform shutdown tasks.
+	 *
+	 * @return void
+	 */
+	public function shutdown();
+
 }

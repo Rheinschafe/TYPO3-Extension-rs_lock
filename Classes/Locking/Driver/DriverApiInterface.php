@@ -55,13 +55,6 @@ interface Tx_RsLock_Locking_Driver_DriverApiInterface {
 	public function isAcquired();
 
 	/**
-	 * Perform shutdown tasks.
-	 *
-	 * @return void
-	 */
-	public function shutdown();
-
-	/**
 	 * Returns string with driver name.
 	 *
 	 * @return string
