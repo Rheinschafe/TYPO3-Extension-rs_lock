@@ -31,6 +31,6 @@
  * @license    http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @author     Daniel Hürtgen <huertgen@rheinschafe.de>
  */
-class Tx_RsPagegenlock_Locking_Locker extends t3lib_lock {
+class Tx_RsPagegenlock_Locking_Locker {
 
 }
