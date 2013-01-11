@@ -6,6 +6,7 @@ $extensionPath = t3lib_extMgm::extPath('rs_lock');
 $extensionClassesPath = t3lib_extMgm::extPath('rs_lock') . 'Classes/';
 return array(
 	'tx_rslock_locking_locker' => $extensionClassesPath . 'Locking/Locker.php',
+	'tx_rslock_locking_abstractlocker' => $extensionClassesPath . 'Locking/AbstractLocker.php',
 	'tx_rslock_locking_lockerinterface' => $extensionClassesPath . 'Locking/LockerInterface.php',
 	'tx_rslock_locking_typo3locker' => $extensionClassesPath . 'Locking/Typo3Locker.php',
 	'tx_rslock_locking_driver_abstractdriver' => $extensionClassesPath . 'Locking/Driver/AbstractDriver.php',
