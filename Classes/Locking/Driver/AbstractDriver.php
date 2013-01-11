@@ -70,6 +70,13 @@ abstract class Tx_RsLock_Locking_Driver_AbstractDriver extends t3lib_svbase
 	protected $_locker;
 
 	/**
+	 * Got lock?
+	 *
+	 * @var boolean
+	 */
+	protected $_isAcquired = FALSE;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param Tx_RsLock_Locking_LockerInterface $locker
@@ -150,6 +157,15 @@ abstract class Tx_RsLock_Locking_Driver_AbstractDriver extends t3lib_svbase
 	 */
 	public function setRetryInterval($retryInterval) {
 		$this->_retryInterval = t3lib_div::intInRange($retryInterval, 1, 9999, 1);
+	}
+
+	/**
+	 * Is lock aquired?
+	 *
+	 * @return boolean TRUE if lock was acquired, otherwise FALSE.
+	 */
+	public function isAcquired() {
+		return $this->_isAcquired;
 	}
 
 	/**
