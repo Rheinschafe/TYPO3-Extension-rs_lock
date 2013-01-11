@@ -24,29 +24,13 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 /**
- * File-Locking-Driver class.
- *  Main locking method: function is_file(), file_exists(), etc
+ * Abstract-File-Locking-Driver class.
  *
  * @package    rs_lock
  * @subpackage Locking/Driver
  * @license    http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @author     Daniel Hürtgen <huertgen@rheinschafe.de>
  */
-class Tx_RsLock_Locking_Driver_FileDriver extends Tx_RsLock_Locking_Driver_AbstractFileDriver {
-
-	/**
-	 * Constructor.
-	 *
-	 * @param mixed    $id
-	 * @param int|null $loops
-	 * @param int|null $step
-	 * @return Tx_RsLock_Locking_Driver_FileDriver
-	 */
-	public function __construct($id, $loops = NULL, $step = NULL) {
-		// set fixed method
-		$method = 'simple';
-
-		return parent::__construct($id, $method, $loops, $steps);
-	}
+abstract class Tx_RsLock_Locking_Driver_AbstractFileDriver extends Tx_RsLock_Locking_Driver_AbstractDriver {
 
 }
