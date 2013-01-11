@@ -137,7 +137,7 @@ abstract class Tx_RsLock_Locking_Driver_AbstractDriver extends t3lib_svbase
 	 * @return void
 	 */
 	public function setRetries($retries) {
-		$this->_retries = t3lib_div::intInRange($retries, 0, 1000);
+		$this->_retries = t3lib_div::intInRange($retries, 1, 1000, $this->_retries);
 	}
 
 	/**
@@ -156,7 +156,7 @@ abstract class Tx_RsLock_Locking_Driver_AbstractDriver extends t3lib_svbase
 	 * @return void
 	 */
 	public function setRetryInterval($retryInterval) {
-		$this->_retryInterval = t3lib_div::intInRange($retryInterval, 1, 9999, 1);
+		$this->_retryInterval = t3lib_div::intInRange($retryInterval, 1, 9999, $this->_retryInterval);
 	}
 
 	/**
