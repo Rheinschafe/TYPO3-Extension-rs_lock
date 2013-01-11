@@ -60,4 +60,57 @@ interface Tx_RsLock_Locking_Driver_DriverApiInterface {
 	 * @return string
 	 */
 	public function getType();
+
+	/**
+	 * Returns unique lock identifier.
+	 *
+	 * @return mixed
+	 */
+	public function getId();
+
+	/**
+	 * Return unique id hash.
+	 * 40 chars long string sha1().
+	 *
+	 * @return string
+	 */
+	public function getIdHash();
+
+	/**
+	 * Get acquire retries setting.
+	 *
+	 * @return int
+	 */
+	public function getRetries();
+
+	/**
+	 * Set acquire fail retries setting.
+	 *
+	 * @param int $retries
+	 * @return void
+	 */
+	public function setRetries($retries);
+
+	/**
+	 * Get acquire retry interval setting.
+	 *
+	 * @return int
+	 */
+	public function getRetryInterval();
+
+	/**
+	 * Set acquire retry interval setting.
+	 *
+	 * @param int $retryInterval
+	 * @return void
+	 */
+	public function setRetryInterval($retryInterval);
+
+	/**
+	 * Get context/prefix for hash.
+	 *
+	 * @return string
+	 */
+	public function getContext();
+
 }
