@@ -35,18 +35,75 @@
 class Tx_RsLock_Locking_Driver_FileDriver extends Tx_RsLock_Locking_Driver_AbstractFileDriver {
 
 	/**
-	 * Constructor.
+	 * Returns string with driver name.
 	 *
-	 * @param mixed    $id
-	 * @param int|null $loops
-	 * @param int|null $step
-	 * @return Tx_RsLock_Locking_Driver_FileDriver
+	 * @return string
+	 * @see Tx_RsLock_Locking_Driver_DriverInterface::getType()
 	 */
-	public function __construct($id, $loops = NULL, $step = NULL) {
-		// set fixed method
-		$method = 'simple';
+	public function getType() {
+		return 'file';
+	}
 
-		return parent::__construct($id, $method, $loops, $steps);
+	/**
+	 * Acquire lock.
+	 *  Tries to acquire locking. It is very important, that the lock will be generated. If something went wrong,
+	 *  throw an runtime exception, but do NOT return FALSE on fail!
+	 *
+	 * @throws Exception
+	 * @return boolean TRUE, if lock was acquired without waiting for other clients/instances, otherwise, if the client was waiting, return FALSE.
+	 * @see  Tx_RsLock_Locking_Driver_DriverInterface::acquire()
+	 * @todo implement logging
+	 */
+	public function acquire() {
+		$noWait = TRUE;
+		$isAcquired = FALSE;
+
+		// lock exists
+		if ($this->fileExists()) {
+			$maxExecutionTime = ini_get('max_execution_time');
+			$maxAge = time() - ($maxExecutionTime ? $maxExecutionTime : 120);
+			if (@filectime($this->resource) < $maxAge) {
+				@unlink($this->resource);
+			}
+		}
+
+		for ($i = 0; $i < $this->getRetries(); $i++) {
+			$filepointer = @fopen($this->getFilePath(), 'x');
+			if ($filepointer !== FALSE) {
+				fclose($filepointer);
+				$noWait = ($i === 0);
+				$isAcquired = TRUE;
+				break;
+			}
+			usleep($this->getRetryInterval() * 1000);
+		}
+
+		// @todo write own exception class
+		if (!$isAcquired) {
+			throw new Exception('Lock file could not be created');
+		}
+
+		$this->_isAcquired = $isAcquired;
+		return $noWait;
+	}
+
+	/**
+	 * Release lock.
+	 *
+	 * @return boolean TRUE if locked was release, otherwise throw lock exception.
+	 * @see Tx_RsLock_Locking_Driver_DriverInterface::release()
+	 */
+	public function release() {
+		$isReleased = TRUE;
+
+		if ($this->isAcquired() && t3lib_div::isAllowedAbsPath($this->getPath()) && t3lib_div::isFirstPartOfStr($this->getFilePath(), $this->getPath())) {
+			if (@unlink($this->getFilePath()) === FALSE) {
+				$isReleased = FALSE;
+			}
+		}
+
+		$this->_isAcquired = FALSE;
+		return $isReleased;
 	}
 
 }
