@@ -60,4 +60,11 @@ interface Tx_RsLock_Locking_Driver_DriverInterface extends Tx_RsLock_Locking_Dri
 	 */
 	public function getLocker();
 
+	/**
+	 * Revalidate if locking type is usable/available.
+	 *
+	 * @return boolean TRUE if locking type is usable/available, FALSE if not.
+	 */
+	public function isAvailable();
+
 }

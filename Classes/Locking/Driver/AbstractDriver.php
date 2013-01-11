@@ -31,7 +31,8 @@
  * @license    http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @author     Daniel Hürtgen <huertgen@rheinschafe.de>
  */
-abstract class Tx_RsLock_Locking_Driver_AbstractDriver implements Tx_RsLock_Locking_Driver_DriverInterface {
+abstract class Tx_RsLock_Locking_Driver_AbstractDriver extends t3lib_svbase
+	implements Tx_RsLock_Locking_Driver_DriverInterface {
 
 	/**
 	 * Unique identifier.
@@ -186,6 +187,16 @@ abstract class Tx_RsLock_Locking_Driver_AbstractDriver implements Tx_RsLock_Lock
 	 */
 	public function shutdown() {
 		return $this->release();
+	}
+
+	/**
+	 * Checks wheater current locking type is usable.
+	 *  Called from t3lib_div::makeServiceInstance()
+	 *
+	 * @return boolean TRUE if locking method is usable/availble.
+	 */
+	public function init() {
+		return $this->isAvailable();
 	}
 
 }
