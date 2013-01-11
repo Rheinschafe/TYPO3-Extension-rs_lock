@@ -36,18 +36,28 @@ interface Tx_RsLock_Locking_Driver_DriverInterface extends Tx_RsLock_Locking_Dri
 	/**
 	 * Constructor.
 	 *
-	 * @param string   $id
-	 * @param int|null $loops
-	 * @param int|null $steps
+	 * @param Tx_RsLock_Locking_LockerInterface $locker
+	 * @param string                            $id
+	 * @param string                            $context
+	 * @param int|null                          $retries
+	 * @param int|null                          $retryInterval
 	 * @return Tx_RsLock_Locking_Driver_DriverInterface
 	 */
-	public function __construct($id, $loops = NULL, $steps = NULL);
+	public function __construct(Tx_RsLock_Locking_LockerInterface $locker, $id, $context, $retries = NULL,
+		$retryInterval = NULL);
 
 	/**
 	 * Perform shutdown tasks.
 	 *
-	 * @return void
+	 * @return boolean True if succeeded, otherwise false.
 	 */
 	public function shutdown();
+
+	/**
+	 * Get parent lock api class.
+	 *
+	 * @return Tx_RsLock_Locking_LockerInterface
+	 */
+	public function getLocker();
 
 }

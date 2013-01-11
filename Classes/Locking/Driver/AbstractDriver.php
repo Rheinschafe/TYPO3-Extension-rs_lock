@@ -33,4 +33,159 @@
  */
 abstract class Tx_RsLock_Locking_Driver_AbstractDriver implements Tx_RsLock_Locking_Driver_DriverInterface {
 
+	/**
+	 * Unique identifier.
+	 *
+	 * @var mixed
+	 */
+	protected $_id;
+
+	/**
+	 * Number of retries, if locking fails.
+	 *
+	 * @var int
+	 */
+	protected $_retries = 150;
+
+	/**
+	 * Number of milliseconds wait between retries.
+	 *
+	 * @var int
+	 */
+	protected $_retryInterval = 200;
+
+	/**
+	 * Context/prefix to generate lock for.
+	 *
+	 * @var string
+	 */
+	protected $_context;
+
+	/**
+	 * Parent lock api class.
+	 *
+	 * @var Tx_RsLock_Locking_LockerInterface
+	 */
+	protected $_locker;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param Tx_RsLock_Locking_LockerInterface $locker
+	 * @param string                            $id
+	 * @param string                            $context
+	 * @param int|null                          $retries
+	 * @param int|null                          $retryInterval
+	 * @return Tx_RsLock_Locking_Driver_AbstractDriver
+	 */
+	public function __construct(Tx_RsLock_Locking_LockerInterface $locker, $id, $context, $retries = NULL,
+		$retryInterval = NULL) {
+		$this->_locker = $locker;
+		$this->_id = (string) $id;
+		$this->_context = (string) $context;
+
+		$this->setRetries($retries);
+		$this->setRetryInterval($retryInterval);
+
+		register_shutdown_function(array(
+										$this,
+										'shutdown'
+								   ));
+	}
+
+	/**
+	 * Get parent lock api class.
+	 *
+	 * @return Tx_RsLock_Locking_LockerInterface
+	 */
+	public function getLocker() {
+		return $this->_locker;
+	}
+
+	/**
+	 * Send message to log.
+	 *
+	 * @param string  $message
+	 * @param integer $severity Severity - 0 is info (default), 1 is notice, 2 is warning, 3 is error, 4 is fatal error
+	 * @return void
+	 */
+	protected function _log($message, $severity = 0) {
+		$this->getLocker()->_log($message, $severity);
+	}
+
+	/**
+	 * Get acquire retries setting.
+	 *
+	 * @return int
+	 */
+	public function getRetries() {
+		return $this->_retries;
+	}
+
+	/**
+	 * Set acquire fail retries setting.
+	 *
+	 * @param int $retries
+	 * @return void
+	 */
+	public function setRetries($retries) {
+		$this->_retries = t3lib_div::intInRange($retries, 0, 1000);
+	}
+
+	/**
+	 * Get acquire retry interval setting.
+	 *
+	 * @return int
+	 */
+	public function getRetryInterval() {
+		return $this->_retryInterval;
+	}
+
+	/**
+	 * Set acquire retry interval setting.
+	 *
+	 * @param int $retryInterval
+	 * @return void
+	 */
+	public function setRetryInterval($retryInterval) {
+		$this->_retryInterval = t3lib_div::intInRange($retryInterval, 1, 9999, 1);
+	}
+
+	/**
+	 * Get context/prefix for hash.
+	 *
+	 * @return string
+	 */
+	public function getContext() {
+		return $this->_context;
+	}
+
+	/**
+	 * Returns unique lock identifier.
+	 *
+	 * @return mixed
+	 */
+	public function getId() {
+		return $this->_id;
+	}
+
+	/**
+	 * Return unique id hash.
+	 * 40 chars long string sha1().
+	 *
+	 * @return string
+	 */
+	public function getIdHash() {
+		return sha1($this->_context . ':' . $this->_id);
+	}
+
+	/**
+	 * Perform shutdown tasks.
+	 *
+	 * @return boolean True if succeeded, otherwise false.
+	 */
+	public function shutdown() {
+		return $this->release();
+	}
+
 }
