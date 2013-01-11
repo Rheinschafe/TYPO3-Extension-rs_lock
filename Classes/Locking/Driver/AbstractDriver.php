@@ -215,4 +215,30 @@ abstract class Tx_RsLock_Locking_Driver_AbstractDriver extends t3lib_svbase
 		return $this->isAvailable();
 	}
 
+	/**
+	 * Get required php functions.
+	 *
+	 * @return array
+	 */
+	protected function _getRequiredPHPFunctions() {
+		return array();
+	}
+
+	/**
+	 * Revalidate if locking type is usable/available.
+	 *
+	 * @return boolean TRUE if locking type is usable/available, FALSE if not.
+	 */
+	public function isAvailable() {
+		// function check
+		$requiredPHPFunctions = $this->_getRequiredPHPFunctions();
+		foreach ($requiredPHPFunctions as $requiredPHPFunction) {
+			if (!function_exists($requiredPHPFunction)) {
+				return FALSE;
+			}
+		}
+
+		return TRUE;
+	}
+
 }
