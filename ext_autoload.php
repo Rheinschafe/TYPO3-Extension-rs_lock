@@ -12,6 +12,7 @@ return array(
 	'tx_rslock_locking_adapter_typo3adapter' => $extensionClassesPath . 'Locking/Adapter/Typo3Adapter.php',
 	'tx_rslock_locking_adapter_typo3adapterinterface' => $extensionClassesPath . 'Locking/Adapter/Typo3AdapterInterface.php',
 	'tx_rslock_locking_driver_abstractdriver' => $extensionClassesPath . 'Locking/Driver/AbstractDriver.php',
+	'tx_rslock_locking_driver_abstractfiledriver' => $extensionClassesPath . 'Locking/Driver/AbstractFileDriver.php',
 	'tx_rslock_locking_driver_abstracttypo3driver' => $extensionClassesPath . 'Locking/Driver/AbstractTypo3Driver.php',
 	'tx_rslock_locking_driver_driverapiinterface' => $extensionClassesPath . 'Locking/Driver/DriverApiInterface.php',
 	'tx_rslock_locking_driver_driverinterface' => $extensionClassesPath . 'Locking/Driver/DriverInterface.php',

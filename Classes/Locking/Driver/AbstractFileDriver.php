@@ -33,4 +33,88 @@
  */
 abstract class Tx_RsLock_Locking_Driver_AbstractFileDriver extends Tx_RsLock_Locking_Driver_AbstractDriver {
 
+	/**
+	 * File path.
+	 *
+	 * @var string
+	 */
+	protected $_path;
+
+	/**
+	 * Get file locking working directory.
+	 *
+	 * @return string
+	 */
+	public function getPath() {
+		if (empty($this->_path)) {
+			$this->_path = PATH_site . 'typo3temp/locks/';
+		}
+
+		return $this->_path;
+	}
+
+	/**
+	 * Get full file locking path.
+	 *
+	 * @return string
+	 */
+	public function getFilePath() {
+		return $this->getPath() . $this->getIdHash();
+	}
+
+	/**
+	 * Checks wheater lock file exists.
+	 *
+	 * @return boolean
+	 */
+	public function fileExists() {
+		return is_file($this->getFilePath());
+	}
+
+	/**
+	 * Is lock aquired?
+	 *
+	 * @return boolean TRUE if lock was acquired, otherwise FALSE.
+	 * @see Tx_RsLock_Locking_Driver_DriverInterface::isAcquired()
+	 */
+	public function isAcquired() {
+		return $this->fileExists() && parent::isAcquired();
+	}
+
+	/**
+	 * Get required php functions.
+	 *
+	 * @return array
+	 */
+	protected function _getRequiredPHPFunctions() {
+		return array(
+			'unlink',
+			'fopen',
+			'filectime',
+			'is_file',
+			'is_dir'
+		);
+	}
+
+	/**
+	 * Revalidate if locking type is usable/available.
+	 *
+	 * @return boolean TRUE if locking type is usable/available, FALSE if not.
+	 */
+	public function isAvailable() {
+		if (!parent::isAvailable()) {
+			return FALSE;
+		}
+
+		if (!is_dir($this->getPath()) && !t3lib_div::mkdir($this->getPath())) {
+			return FALSE;
+		}
+
+		if (!is_writable($this->getPath())) {
+			return FALSE;
+		}
+
+		return TRUE;
+	}
+
 }
