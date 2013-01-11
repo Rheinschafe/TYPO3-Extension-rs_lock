@@ -31,6 +31,6 @@
  * @license    http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @author     Daniel Hürtgen <huertgen@rheinschafe.de>
  */
-class ux_t3lib_lock extends Tx_RsLock_Locking_Typo3Locker {
+class ux_t3lib_lock extends Tx_RsLock_Locking_Adapter_Typo3Adapter {
 
 }
