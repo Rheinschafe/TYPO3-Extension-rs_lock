@@ -102,7 +102,7 @@ class Tx_RsLock_Locking_Driver_FileDriver extends Tx_RsLock_Locking_Driver_Abstr
 
 		// if is acquired // release lock
 		if ($this->isAcquired()) {
-			if ($this->_deleteFile()) {
+			if ($this->_deleteFile() === FALSE) {
 				$isReleased = FALSE;
 			}
 		}
