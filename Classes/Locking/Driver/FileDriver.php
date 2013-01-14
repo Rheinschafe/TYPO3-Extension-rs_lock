@@ -100,8 +100,9 @@ class Tx_RsLock_Locking_Driver_FileDriver extends Tx_RsLock_Locking_Driver_Abstr
 	public function release() {
 		$isReleased = TRUE;
 
-		if ($this->isAcquired() && t3lib_div::isAllowedAbsPath($this->getPath()) && t3lib_div::isFirstPartOfStr($this->getFilePath(), $this->getPath())) {
-			if (@unlink($this->getFilePath()) === FALSE) {
+		// if is acquired // release lock
+		if ($this->isAcquired()) {
+			if ($this->_deleteFile()) {
 				$isReleased = FALSE;
 			}
 		}

@@ -102,6 +102,15 @@ abstract class Tx_RsLock_Locking_Driver_AbstractFileDriver extends Tx_RsLock_Loc
 	}
 
 	/**
+	 * Delete current lock file.
+	 *
+	 * @return boolean
+	 */
+	protected function _deleteFile() {
+		return @unlink($this->getValidFilePath());
+	}
+
+	/**
 	 * Is lock aquired?
 	 *
 	 * @return boolean TRUE if lock was acquired, otherwise FALSE.
