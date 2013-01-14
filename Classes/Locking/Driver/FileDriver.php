@@ -67,7 +67,7 @@ class Tx_RsLock_Locking_Driver_FileDriver extends Tx_RsLock_Locking_Driver_Abstr
 
 		// try to acquire lock
 		for ($i = 0; $i < $this->getRetries(); $i++) {
-			$fileOointer = @fopen($filePath, 'x');
+			$filePointer = @fopen($filePath, 'x');
 			if ($filePointer !== FALSE) {
 				fclose($filePointer);
 				$noWait = ($i === 0);
