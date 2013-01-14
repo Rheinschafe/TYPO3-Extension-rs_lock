@@ -58,13 +58,11 @@ class Tx_RsLock_Locking_Driver_FileDriver extends Tx_RsLock_Locking_Driver_Abstr
 		$noWait = TRUE;
 		$isAcquired = FALSE;
 
-		// lock exists
-		if ($this->fileExists()) {
-			$maxExecutionTime = ini_get('max_execution_time');
-			$maxAge = time() - ($maxExecutionTime ? $maxExecutionTime : 120);
-			if (@filectime($this->resource) < $maxAge) {
-				@unlink($this->resource);
-			}
+		$filePath = $this->getValidFilePath();
+
+		// cleanup (GC)
+		if ($this->fileExists() && @filectime($filePath) < $this->_getMaxAge()) {
+			$this->_deleteFile();
 		}
 
 		for ($i = 0; $i < $this->getRetries(); $i++) {
