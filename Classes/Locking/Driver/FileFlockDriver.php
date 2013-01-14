@@ -32,21 +32,99 @@
  * @license    http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @author     Daniel Hürtgen <huertgen@rheinschafe.de>
  */
-class Tx_RsLock_Locking_Driver_FileFlockDriver extends Tx_RsLock_Locking_Driver_AbstractTypo3Driver {
+class Tx_RsLock_Locking_Driver_FileFlockDriver extends Tx_RsLock_Locking_Driver_AbstractFileDriver {
 
 	/**
-	 * Constructor.
+	 * Returns string with driver name.
 	 *
-	 * @param mixed    $id
-	 * @param int|null $loops
-	 * @param int|null $step
-	 * @return Tx_RsLock_Locking_Driver_FileFlockDriver
+	 * @return string
+	 * @see Tx_RsLock_Locking_Driver_DriverInterface::getType()
 	 */
-	public function __construct($id, $loops = NULL, $step = NULL) {
-		// set fixed method
-		$method = 'flock';
+	public function getType() {
+		return 'flock';
+	}
 
-		return parent::__construct($id, $method, $loops, $step);
+	/**
+	 * Get required php functions.
+	 *
+	 * @return array
+	 * @see Tx_RsLock_Locking_Driver_AbstractFileDriver::_getRequiredPHPFunctions()
+	 */
+	protected function _getRequiredPHPFunctions() {
+		$flockPHPFunctions = array('flock');
+
+		return array_unique(t3lib_div::array_merge(parent::_getRequiredPHPFunctions(), $flockPHPFunctions));
+	}
+
+	/**
+	 * Acquire lock.
+	 *  Tries to acquire locking. It is very important, that the lock will be generated. If something went wrong,
+	 *  throw an runtime exception, but do NOT return FALSE on fail!
+	 *
+	 * @throws Exception
+	 * @return boolean TRUE, if lock was acquired without waiting for other clients/instances, otherwise, if the client was waiting, return FALSE.
+	 */
+	public function acquire() {
+		$noWait = TRUE;
+		$isAcquired = FALSE;
+
+		$filePath = $this->getValidFilePath();
+
+		// try to acquire lock
+		for ($i = 0; $i < $this->getRetries(); $i++) {
+			$filePointer = @fopen($filePath, 'w+');
+			if ($filePointer !== FALSE) {
+				if (flock($filePointer, LOCK_EX | LOCK_UN) === TRUE) {
+					$noWait = ($i === 0);
+					$isAcquired = TRUE;
+				}
+				fclose($filePointer);
+				if ($isAcquired) {
+					break;
+				}
+			}
+			// sleep for retryInterval
+			$this->_waitForRetry();
+		}
+
+		// @todo write own exception class
+		if (!$isAcquired) {
+			throw new Exception('Lock file could not be acquired.');
+		}
+
+		// fix permissions
+		t3lib_div::fixPermissions($filePath);
+
+		$this->_isAcquired = $isAcquired;
+
+		return $noWait;
+	}
+
+	/**
+	 * Release lock.
+	 *
+	 * @return boolean TRUE if locked was release, otherwise throw lock exception.
+	 */
+	public function release() {
+		$isReleased = TRUE;
+
+		// if is acquired // release lock
+		if ($this->isAcquired()) {
+			$filePath = $this->getValidFilePath();
+
+			$filePointer = @fopen($filePath, 'w+');
+			if ($filePointer !== FALSE) {
+				if (flock($filePointer, LOCK_UN) === FALSE) {
+					$isReleased = FALSE;
+				}
+				fclose($filePointer);
+			}
+
+		}
+
+		$this->_isAcquired = FALSE;
+
+		return $isReleased;
 	}
 
 }
