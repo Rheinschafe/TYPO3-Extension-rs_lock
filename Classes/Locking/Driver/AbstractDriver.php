@@ -169,6 +169,16 @@ abstract class Tx_RsLock_Locking_Driver_AbstractDriver extends t3lib_svbase
 	}
 
 	/**
+	 * Get max age of an existing lock.
+	 *
+	 * @return integer
+	 */
+	protected function _getMaxAge() {
+		$maxExecutionTime = ini_get('max_execution_time');
+		return time() - ($maxExecutionTime ? $maxExecutionTime : 120);
+	}
+
+	/**
 	 * Is lock aquired?
 	 *
 	 * @return boolean TRUE if lock was acquired, otherwise FALSE.
