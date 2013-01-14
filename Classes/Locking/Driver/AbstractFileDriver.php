@@ -120,6 +120,7 @@ abstract class Tx_RsLock_Locking_Driver_AbstractFileDriver extends Tx_RsLock_Loc
 		return array(
 			'unlink',
 			'fopen',
+			'fclose',
 			'filectime',
 			'is_file',
 			'is_dir'
