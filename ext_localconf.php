@@ -48,5 +48,5 @@ $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$_EXTKEY]['driverMapping'] = array(
 	'file'      => 'Tx_RsLock_Locking_Driver_FileDriver',
 	'flock'     => 'Tx_RsLock_Locking_Driver_FileFlockDriver',
 	'semaphore' => 'Tx_RsLock_Locking_Driver_SemaphoreDriver',
-	'mysql'     => 'Tx_RsLock_Locking_Driver_MysqlDriver',
+	'mysql'     => 'Tx_RsLock_Locking_Driver_MySQLDriver',
 );
