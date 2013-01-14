@@ -65,6 +65,7 @@ class Tx_RsLock_Locking_Driver_FileDriver extends Tx_RsLock_Locking_Driver_Abstr
 			$this->_deleteFile();
 		}
 
+		// try to acquire lock
 		for ($i = 0; $i < $this->getRetries(); $i++) {
 			$filepointer = @fopen($this->getFilePath(), 'x');
 			if ($filepointer !== FALSE) {
@@ -73,18 +74,20 @@ class Tx_RsLock_Locking_Driver_FileDriver extends Tx_RsLock_Locking_Driver_Abstr
 				$isAcquired = TRUE;
 				break;
 			}
+			// sleep for retryInterval
 			$this->_waitForRetry();
 		}
 
 		// @todo write own exception class
 		if (!$isAcquired) {
-			throw new Exception('Lock file could not be created');
+			throw new Exception('Lock file could not be acquired.');
 		}
 
 		// fix permissions
 		t3lib_div::fixPermissions($filePath);
 
 		$this->_isAcquired = $isAcquired;
+
 		return $noWait;
 	}
 
@@ -104,6 +107,7 @@ class Tx_RsLock_Locking_Driver_FileDriver extends Tx_RsLock_Locking_Driver_Abstr
 		}
 
 		$this->_isAcquired = FALSE;
+
 		return $isReleased;
 	}
 
