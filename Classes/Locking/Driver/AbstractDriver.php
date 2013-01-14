@@ -160,6 +160,15 @@ abstract class Tx_RsLock_Locking_Driver_AbstractDriver extends t3lib_svbase
 	}
 
 	/**
+	 * Waits milliseconds (interval) for next retry.
+	 *
+	 * @return void
+	 */
+	protected function _waitForRetry() {
+		usleep($this->getRetryInterval() * 1000);
+	}
+
+	/**
 	 * Is lock aquired?
 	 *
 	 * @return boolean TRUE if lock was acquired, otherwise FALSE.
