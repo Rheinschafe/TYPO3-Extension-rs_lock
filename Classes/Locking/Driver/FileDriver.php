@@ -81,6 +81,9 @@ class Tx_RsLock_Locking_Driver_FileDriver extends Tx_RsLock_Locking_Driver_Abstr
 			throw new Exception('Lock file could not be created');
 		}
 
+		// fix permissions
+		t3lib_div::fixPermissions($filePath);
+
 		$this->_isAcquired = $isAcquired;
 		return $noWait;
 	}
