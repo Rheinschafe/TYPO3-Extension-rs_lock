@@ -75,7 +75,7 @@ class Tx_RsLock_Locking_Driver_FileDriver extends Tx_RsLock_Locking_Driver_Abstr
 				$isAcquired = TRUE;
 				break;
 			}
-			usleep($this->getRetryInterval() * 1000);
+			$this->_waitForRetry();
 		}
 
 		// @todo write own exception class
