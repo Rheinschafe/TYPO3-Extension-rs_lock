@@ -63,7 +63,8 @@ class Tx_RsLock_Locking_SimpleLocker extends Tx_RsLock_Locking_AbstractLocker
 																	$steps
 															   ));
 		} else {
-			throw new InvalidArgumentException('Invalid driver given.');
+			throw new InvalidArgumentException(sprintf('Invalid driver "%s" given. Driver must be implement "Tx_RsLock_Locking_Driver_DriverInterface".',
+				(is_object($driver) ? get_class($driver) : $driver)));
 		}
 	}
 
