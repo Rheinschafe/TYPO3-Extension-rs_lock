@@ -54,12 +54,42 @@ abstract class Tx_RsLock_Locking_Driver_AbstractFileDriver extends Tx_RsLock_Loc
 	}
 
 	/**
+	 * Returns valid path, otherwise throws exception.
+	 *
+	 * @throws RuntimeException
+	 * @return string
+	 */
+	public function getValidPath() {
+		if (!t3lib_div::isAllowedAbsPath($this->getPath())) {
+			throw new RuntimeException(sprintf('Current path "%s" is not a valid path.', $this->getPath()));
+		}
+
+		return $this->getPath();
+	}
+
+	/**
 	 * Get full file locking path.
 	 *
 	 * @return string
 	 */
 	public function getFilePath() {
 		return $this->getPath() . $this->getIdHash();
+	}
+
+	/**
+	 * Returns valid file path, otherwise throws exception.
+	 *
+	 * @throws RuntimeException
+	 * @return string
+	 */
+	public function getValidFilePath() {
+		if (!t3lib_div::isFirstPartOfStr($this->getFilePath(), $this->getPath())
+		) {
+			throw new RuntimeException(sprintf('Current file-path "%s" is not a valid file-path.',
+											   $this->getFilePath()));
+		}
+
+		return $this->getFilePath();
 	}
 
 	/**
