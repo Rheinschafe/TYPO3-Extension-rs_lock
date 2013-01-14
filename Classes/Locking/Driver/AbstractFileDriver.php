@@ -98,7 +98,7 @@ abstract class Tx_RsLock_Locking_Driver_AbstractFileDriver extends Tx_RsLock_Loc
 	 * @return boolean
 	 */
 	public function fileExists() {
-		return is_file($this->getFilePath());
+		return is_file($this->getValidFilePath());
 	}
 
 	/**
@@ -136,11 +136,13 @@ abstract class Tx_RsLock_Locking_Driver_AbstractFileDriver extends Tx_RsLock_Loc
 			return FALSE;
 		}
 
-		if (!is_dir($this->getPath()) && !t3lib_div::mkdir($this->getPath())) {
+		$path = $this->getValidPath();
+
+		if (!is_dir($path) && !t3lib_div::mkdir($path)) {
 			return FALSE;
 		}
 
-		if (!is_writable($this->getPath())) {
+		if (!is_writable($path)) {
 			return FALSE;
 		}
 
