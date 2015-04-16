@@ -1,5 +1,7 @@
-Rheinschafe | Advanced TYPO3 Locking (EXT: rs_lock)
+Rheinschafe | Advanced TYPO3 Locking
 ===================================================
+
+(EXT: rs_lock)
 
 If you need advanced TYPO3 locking functions, this extension may help you.
 
