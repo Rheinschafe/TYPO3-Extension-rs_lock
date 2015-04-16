@@ -3,7 +3,7 @@
 /***************************************************************
  * Extension Manager/Repository config file for ext "rs_lock".
  *
- * Auto generated 15-01-2013 11:09
+ * Auto generated 15-01-2015 11:09
  *
  * Manual updates:
  * Only the data in the array - everything else is removed by next

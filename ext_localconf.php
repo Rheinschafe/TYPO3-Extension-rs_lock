@@ -3,8 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2012 Daniel Hürtgen <huertgen@rheinschafe.de>, Rheinschafe GmbH
- *  Kai Lehmkühler <lehmkuehler@rheinschafe.de>, Rheinschafe GmbH
+ *  (c) 2012-2015 Daniel Hürtgen <huertgen@rheinschafe.de>, Rheinschafe GmbH
  *
  *  All rights reserved
  *
