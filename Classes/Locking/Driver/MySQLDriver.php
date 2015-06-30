@@ -113,6 +113,11 @@ class Tx_RsLock_Locking_Driver_MySQLDriver extends Tx_RsLock_Locking_Driver_Abst
 	 * @return boolean TRUE if locked was release, otherwise throw lock exception.
 	 */
 	public function release() {
+		// FIXME during php shutdown there is no database connection
+		if (!$this->_getTypo3Db() instanceof t3lib_DB) {
+			return FALSE;
+		}
+
 		$isReleased = TRUE;
 
 		// if is acquired // release lock
