@@ -21,3 +21,13 @@ indent_size = 4
 [*.md]
 indent_size = 2
 indent_style = space
+
+# JSON-Files
+[*.json]
+indent_size = 2
+indent_style = space
+
+# YML-Files
+[*.yml]
+indent_size = 2
+indent_style = space
