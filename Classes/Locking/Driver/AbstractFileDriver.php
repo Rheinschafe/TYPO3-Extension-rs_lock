@@ -1,5 +1,9 @@
 <?php
 
+namespace Rheinschafe\RsLock\Locking\Driver;
+
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -32,7 +36,7 @@
  * @license    http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @author     Daniel Hürtgen <huertgen@rheinschafe.de>
  */
-abstract class Tx_RsLock_Locking_Driver_AbstractFileDriver extends Tx_RsLock_Locking_Driver_AbstractDriver {
+abstract class AbstractFileDriver extends AbstractDriver {
 
 	/**
 	 * File path.
@@ -57,12 +61,12 @@ abstract class Tx_RsLock_Locking_Driver_AbstractFileDriver extends Tx_RsLock_Loc
 	/**
 	 * Returns valid path, otherwise throws exception.
 	 *
-	 * @throws RuntimeException
+	 * @throws \RuntimeException
 	 * @return string
 	 */
 	public function getValidPath() {
-		if (!t3lib_div::isAllowedAbsPath($this->getPath())) {
-			throw new RuntimeException(sprintf('Current path "%s" is not a valid path.', $this->getPath()));
+		if (!GeneralUtility::isAllowedAbsPath($this->getPath())) {
+			throw new \RuntimeException(sprintf('Current path "%s" is not a valid path.', $this->getPath()));
 		}
 
 		return $this->getPath();
@@ -84,9 +88,9 @@ abstract class Tx_RsLock_Locking_Driver_AbstractFileDriver extends Tx_RsLock_Loc
 	 * @return string
 	 */
 	public function getValidFilePath() {
-		if (!t3lib_div::isFirstPartOfStr($this->getFilePath(), $this->getPath())
+		if (!GeneralUtility::isFirstPartOfStr($this->getFilePath(), $this->getPath())
 		) {
-			throw new RuntimeException(
+			throw new \RuntimeException(
 				sprintf(
 					'Current file-path "%s" is not a valid file-path.',
 					$this->getFilePath()
@@ -153,7 +157,7 @@ abstract class Tx_RsLock_Locking_Driver_AbstractFileDriver extends Tx_RsLock_Loc
 
 		$path = $this->getValidPath();
 
-		if (!is_dir($path) && !t3lib_div::mkdir($path)) {
+		if (!is_dir($path) && !GeneralUtility::mkdir($path)) {
 			return FALSE;
 		}
 

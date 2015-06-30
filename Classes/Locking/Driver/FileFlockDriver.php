@@ -1,5 +1,9 @@
 <?php
 
+namespace Rheinschafe\RsLock\Locking\Driver;
+
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -33,7 +37,7 @@
  * @license    http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @author     Daniel Hürtgen <huertgen@rheinschafe.de>
  */
-class Tx_RsLock_Locking_Driver_FileFlockDriver extends Tx_RsLock_Locking_Driver_AbstractFileDriver {
+class FileFlockDriver extends AbstractFileDriver {
 
 	/**
 	 * Returns string with driver name.
@@ -54,7 +58,7 @@ class Tx_RsLock_Locking_Driver_FileFlockDriver extends Tx_RsLock_Locking_Driver_
 	protected function _getRequiredPHPFunctions() {
 		$flockPHPFunctions = array('flock');
 
-		return array_unique(t3lib_div::array_merge(parent::_getRequiredPHPFunctions(), $flockPHPFunctions));
+		return array_unique(GeneralUtility::array_merge(parent::_getRequiredPHPFunctions(), $flockPHPFunctions));
 	}
 
 	/**
@@ -62,7 +66,7 @@ class Tx_RsLock_Locking_Driver_FileFlockDriver extends Tx_RsLock_Locking_Driver_
 	 *  Tries to acquire locking. It is very important, that the lock will be generated. If something went wrong,
 	 *  throw an runtime exception, but do NOT return FALSE on fail!
 	 *
-	 * @throws Exception
+	 * @throws \Exception
 	 * @return boolean TRUE, if lock was acquired without waiting for other clients/instances, otherwise, if the client was
 	 *                 waiting, return FALSE.
 	 */
@@ -91,11 +95,11 @@ class Tx_RsLock_Locking_Driver_FileFlockDriver extends Tx_RsLock_Locking_Driver_
 
 		// @todo write own exception class
 		if (!$isAcquired) {
-			throw new Exception('Lock file could not be acquired.');
+			throw new \Exception('Lock file could not be acquired.');
 		}
 
 		// fix permissions
-		t3lib_div::fixPermissions($filePath);
+		GeneralUtility::fixPermissions($filePath);
 
 		$this->_isAcquired = $isAcquired;
 

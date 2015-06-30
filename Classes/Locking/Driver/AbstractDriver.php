@@ -1,5 +1,11 @@
 <?php
 
+namespace Rheinschafe\RsLock\Locking\Driver;
+
+use Rheinschafe\RsLock\Locking\LockerInterface;
+use TYPO3\CMS\Core\Service\AbstractService;
+use TYPO3\CMS\Core\Utility\MathUtility;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -32,7 +38,7 @@
  * @license    http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @author     Daniel Hürtgen <huertgen@rheinschafe.de>
  */
-abstract class Tx_RsLock_Locking_Driver_AbstractDriver extends t3lib_svbase implements Tx_RsLock_Locking_Driver_DriverInterface {
+abstract class AbstractDriver extends AbstractService implements DriverInterface {
 
 	/**
 	 * Unique identifier.
@@ -65,7 +71,7 @@ abstract class Tx_RsLock_Locking_Driver_AbstractDriver extends t3lib_svbase impl
 	/**
 	 * Parent lock api class.
 	 *
-	 * @var Tx_RsLock_Locking_LockerInterface
+	 * @var LockerInterface
 	 */
 	protected $_locker;
 
@@ -79,14 +85,14 @@ abstract class Tx_RsLock_Locking_Driver_AbstractDriver extends t3lib_svbase impl
 	/**
 	 * Constructor.
 	 *
-	 * @param Tx_RsLock_Locking_LockerInterface $locker
-	 * @param string                            $id
-	 * @param string                            $context
-	 * @param int|null                          $retries
-	 * @param int|null                          $retryInterval
-	 * @return Tx_RsLock_Locking_Driver_AbstractDriver
+	 * @param LockerInterface $locker
+	 * @param string          $id
+	 * @param string          $context
+	 * @param int|null        $retries
+	 * @param int|null        $retryInterval
+	 * @return AbstractDriver
 	 */
-	public function __construct(Tx_RsLock_Locking_LockerInterface $locker, $id, $context, $retries = NULL, $retryInterval = NULL) {
+	public function __construct(LockerInterface $locker, $id, $context, $retries = NULL, $retryInterval = NULL) {
 		$this->_locker = $locker;
 		$this->_id = (string) $id;
 		$this->_context = (string) $context;
@@ -105,7 +111,7 @@ abstract class Tx_RsLock_Locking_Driver_AbstractDriver extends t3lib_svbase impl
 	/**
 	 * Get parent lock api class.
 	 *
-	 * @return Tx_RsLock_Locking_LockerInterface
+	 * @return LockerInterface
 	 */
 	public function getLocker() {
 		return $this->_locker;
@@ -138,7 +144,7 @@ abstract class Tx_RsLock_Locking_Driver_AbstractDriver extends t3lib_svbase impl
 	 * @return void
 	 */
 	public function setRetries($retries) {
-		$this->_retries = t3lib_div::intInRange($retries, 1, 1000, $this->_retries);
+		$this->_retries = MathUtility::forceIntegerInRange($retries, 1, 1000, $this->_retries);
 	}
 
 	/**
@@ -157,7 +163,7 @@ abstract class Tx_RsLock_Locking_Driver_AbstractDriver extends t3lib_svbase impl
 	 * @return void
 	 */
 	public function setRetryInterval($retryInterval) {
-		$this->_retryInterval = t3lib_div::intInRange($retryInterval, 1, 9999, $this->_retryInterval);
+		$this->_retryInterval = MathUtility::forceIntegerInRange($retryInterval, 1, 9999, $this->_retryInterval);
 	}
 
 	/**

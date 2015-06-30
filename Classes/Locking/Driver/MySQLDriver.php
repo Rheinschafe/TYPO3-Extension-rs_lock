@@ -1,5 +1,9 @@
 <?php
 
+namespace Rheinschafe\RsLock\Locking\Driver;
+
+use TYPO3\CMS\Core\Database\DatabaseConnection;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -33,7 +37,7 @@
  * @license    http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @author     Daniel Hürtgen <huertgen@rheinschafe.de>
  */
-class Tx_RsLock_Locking_Driver_MySQLDriver extends Tx_RsLock_Locking_Driver_AbstractDriver {
+class MySQLDriver extends AbstractDriver {
 
 	/**
 	 * Lock table name.
@@ -65,7 +69,7 @@ class Tx_RsLock_Locking_Driver_MySQLDriver extends Tx_RsLock_Locking_Driver_Abst
 	 * Returns string with driver name.
 	 *
 	 * @return string
-	 * @see Tx_RsLock_Locking_Driver_DriverInterface::getType()
+	 * @see DriverInterface::getType()
 	 */
 	public function getType() {
 		return 'mysql';
@@ -76,7 +80,7 @@ class Tx_RsLock_Locking_Driver_MySQLDriver extends Tx_RsLock_Locking_Driver_Abst
 	 *  Tries to acquire locking. It is very important, that the lock will be generated. If something went wrong,
 	 *  throw an runtime exception, but do NOT return FALSE on fail!
 	 *
-	 * @throws Exception
+	 * @throws \Exception
 	 * @return boolean TRUE, if lock was acquired without waiting for other clients/instances, otherwise, if the client was
 	 *                 waiting, return FALSE.
 	 */
@@ -101,7 +105,7 @@ class Tx_RsLock_Locking_Driver_MySQLDriver extends Tx_RsLock_Locking_Driver_Abst
 
 		// @todo write own exception class
 		if (!$isAcquired) {
-			throw new Exception('DB-Lock could not be acquired.');
+			throw new \Exception('DB-Lock could not be acquired.');
 		}
 
 		$this->_isAcquired = $isAcquired;
@@ -116,7 +120,7 @@ class Tx_RsLock_Locking_Driver_MySQLDriver extends Tx_RsLock_Locking_Driver_Abst
 	 */
 	public function release() {
 		// FIXME during php shutdown there is no database connection
-		if (!$this->_getTypo3Db() instanceof t3lib_DB) {
+		if (!$this->_getTypo3Db() instanceof DatabaseConnection) {
 			return FALSE;
 		}
 
@@ -138,7 +142,7 @@ class Tx_RsLock_Locking_Driver_MySQLDriver extends Tx_RsLock_Locking_Driver_Abst
 	 * Is lock aquired?
 	 *
 	 * @return boolean TRUE if lock was acquired, otherwise FALSE.
-	 * @see Tx_RsLock_Locking_Driver_DriverInterface::isAcquired()
+	 * @see DriverInterface::isAcquired()
 	 */
 	public function isAcquired() {
 		return $this->_getLockRecordFromDb(TRUE) && parent::isAcquired();
@@ -150,7 +154,7 @@ class Tx_RsLock_Locking_Driver_MySQLDriver extends Tx_RsLock_Locking_Driver_Abst
 	 * @return boolean TRUE if locking type is usable/available, FALSE if not.
 	 */
 	public function isAvailable() {
-		if (!$this->_getTypo3Db() instanceof t3lib_DB || !parent::isAvailable()) {
+		if (!$this->_getTypo3Db() instanceof DatabaseConnection || !parent::isAvailable()) {
 			return FALSE;
 		}
 
@@ -162,7 +166,7 @@ class Tx_RsLock_Locking_Driver_MySQLDriver extends Tx_RsLock_Locking_Driver_Abst
 	/**
 	 * Getter for typo3 db object.
 	 *
-	 * @return t3lib_DB
+	 * @return DatabaseConnection
 	 */
 	protected function _getTypo3Db() {
 		return $GLOBALS['TYPO3_DB'];
@@ -226,9 +230,9 @@ class Tx_RsLock_Locking_Driver_MySQLDriver extends Tx_RsLock_Locking_Driver_Abst
 		$sql['table'] = $this->_lockTableName;
 		$sql['fields'] = $this->_lockTableName . '.' . $this->_hashTableField . ', ' . $this->_lockTableName . '.' . $this->_createdAtTableField;
 		$sql['where'] = $this->_lockTableName . '.' . $this->_hashTableField . ' = ' . $this->_getTypo3Db()->fullQuoteStr(
-					$this->getIdHash(),
-					$this->_lockTableName
-				);
+				$this->getIdHash(),
+				$this->_lockTableName
+			);
 		if ($useMaxAgeClause) {
 			$sql['where'] .= ' AND ' . $this->_lockTableName . '.' . $this->_createdAtTableField . $comparisonMaxAgeClause . $this->_getMaxAge(
 				);
@@ -246,9 +250,9 @@ class Tx_RsLock_Locking_Driver_MySQLDriver extends Tx_RsLock_Locking_Driver_Abst
 	protected function _deleteLockRecordFromDb() {
 		// delete where clause
 		$sqlWhere = $this->_lockTableName . '.' . $this->_hashTableField . '=' . $this->_getTypo3Db()->fullQuoteStr(
-					$this->getIdHash(),
-					$this->_lockTableName
-				);
+				$this->getIdHash(),
+				$this->_lockTableName
+			);
 
 		// execute delete
 		$this->_getTypo3Db()->exec_DELETEquery($this->_lockTableName, $sqlWhere);

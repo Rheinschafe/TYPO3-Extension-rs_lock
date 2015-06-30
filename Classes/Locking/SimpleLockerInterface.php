@@ -1,5 +1,9 @@
 <?php
 
+namespace Rheinschafe\RsLock\Locking;
+
+use Rheinschafe\RsLock\Locking\Driver\DriverInterface;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -32,24 +36,24 @@
  * @license    http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @author     Daniel Hürtgen <huertgen@rheinschafe.de>
  */
-interface Tx_RsLock_Locking_SimpleLockerInterface extends Tx_RsLock_Locking_LockerInterface {
+interface SimpleLockerInterface extends LockerInterface {
 
 	/**
 	 * Constructor.
 	 *
-	 * @param mixed                                           $id      Unique id used for locking.
-	 * @param string|Tx_RsLock_Locking_Driver_DrvierInterface $driver  Driver class object or string.
-	 * @param string                                          $context Locking context/prefix.
-	 * @param null                                            $loops   Times a lock is tried to acuqire.
-	 * @param null                                            $steps   Milliseconds to sleep between looping.
-	 * @return Tx_RsLock_Locking_SimpleLockerInterface
+	 * @param mixed                  $id      Unique id used for locking.
+	 * @param string|DriverInterface $driver  Driver class object or string.
+	 * @param string                 $context Locking context/prefix.
+	 * @param null                   $loops   Times a lock is tried to acuqire.
+	 * @param null                   $steps   Milliseconds to sleep between looping.
+	 * @return SimpleLockerInterface
 	 */
 	public function __construct($id, $driver, $context, $loops = NULL, $steps = NULL);
 
 	/**
 	 * Get driver.
 	 *
-	 * @return Tx_RsLock_Locking_Driver_DriverInterface
+	 * @return DriverInterface
 	 */
 	public function getDriver();
 

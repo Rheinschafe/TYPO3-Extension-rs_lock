@@ -1,5 +1,7 @@
 <?php
 
+namespace Rheinschafe\RsLock\Locking\Adapter;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -32,19 +34,19 @@
  * @license    http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @author     Daniel Hürtgen <huertgen@rheinschafe.de>
  */
-interface Tx_RsLock_Locking_Adapter_Typo3AdapterInterface {
+interface Typo3AdapterInterface {
 
 	/**
 	 * Get real locker object.
 	 *
-	 * @return Tx_RsLock_Locking_SimpleLockerInterface
+	 * @return Typo3AdapterInterface
 	 */
 	public function getLocker();
 
 	/**
 	 * Get driver object.
 	 *
-	 * @return Tx_RsLock_Locking_Driver_DriverInterface
+	 * @return Typo3AdapterInterface
 	 */
 	public function getDriver();
 

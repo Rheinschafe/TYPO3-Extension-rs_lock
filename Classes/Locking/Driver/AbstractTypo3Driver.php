@@ -1,5 +1,9 @@
 <?php
 
+namespace Rheinschafe\RsLock\Locking\Driver;
+
+use TYPO3\CMS\Core\Locking\Locker as CoreLocker;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -32,12 +36,11 @@
  * @license    http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @author     Daniel Hürtgen <huertgen@rheinschafe.de>
  */
-abstract class Tx_RsLock_Locking_Driver_AbstractTypo3Driver extends t3lib_lock
-	implements Tx_RsLock_Locking_Driver_DriverInterface {
+abstract class AbstractTypo3Driver extends CoreLocker implements DriverInterface {
 
 	/**
 	 * Is lock aquired?
-	 * Wrapper method for t3lib_lock::getLockStatus() method.
+	 * Wrapper method for Locker::getLockStatus() method.
 	 *
 	 * @return bool|string
 	 */
@@ -47,8 +50,8 @@ abstract class Tx_RsLock_Locking_Driver_AbstractTypo3Driver extends t3lib_lock
 
 	/**
 	 * Perform shutdown tasks.
-	 * Wrapper method for old t3lib_lock::__destructor().
-	 * Calls t3lib_lock::release() method.
+	 * Wrapper method for old Locker::__destructor().
+	 * Calls Locker::release() method.
 	 *
 	 * @return void
 	 */
@@ -58,7 +61,7 @@ abstract class Tx_RsLock_Locking_Driver_AbstractTypo3Driver extends t3lib_lock
 
 	/**
 	 * Returns string with driver name.
-	 * Wraps to t3lib_lock::getMethod() method.
+	 * Wraps to Locker::getMethod() method.
 	 *
 	 * @return string
 	 */

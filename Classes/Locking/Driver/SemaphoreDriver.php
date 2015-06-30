@@ -1,5 +1,7 @@
 <?php
 
+namespace Rheinschafe\RsLock\Locking\Driver;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -33,7 +35,7 @@
  * @license    http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @author     Daniel Hürtgen <huertgen@rheinschafe.de>
  */
-class Tx_RsLock_Locking_Driver_SemaphoreDriver extends Tx_RsLock_Locking_Driver_AbstractTypo3Driver {
+class SemaphoreDriver extends AbstractTypo3Driver {
 
 	/**
 	 * Constructor.
@@ -41,7 +43,7 @@ class Tx_RsLock_Locking_Driver_SemaphoreDriver extends Tx_RsLock_Locking_Driver_
 	 * @param mixed    $id
 	 * @param int|null $loops
 	 * @param int|null $step
-	 * @return Tx_RsLock_Locking_Driver_SemaphoreDriver
+	 * @return SemaphoreDriver
 	 */
 	public function __construct($id, $loops = NULL, $step = NULL) {
 		// set fixed method

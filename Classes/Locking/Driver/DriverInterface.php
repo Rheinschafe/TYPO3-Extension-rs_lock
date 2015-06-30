@@ -1,5 +1,9 @@
 <?php
 
+namespace Rheinschafe\RsLock\Locking\Driver;
+
+use Rheinschafe\RsLock\Locking\LockerInterface;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -32,21 +36,19 @@
  * @license    http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @author     Daniel Hürtgen <huertgen@rheinschafe.de>
  */
-interface Tx_RsLock_Locking_Driver_DriverInterface extends Tx_RsLock_Locking_Driver_DriverApiInterface {
+interface DriverInterface extends DriverApiInterface {
 
 	/**
 	 * Constructor.
 	 *
-	 * @param Tx_RsLock_Locking_LockerInterface $locker
-	 * @param string                            $id
-	 * @param string                            $context
-	 * @param int|null                          $retries
-	 * @param int|null                          $retryInterval
-	 * @return Tx_RsLock_Locking_Driver_DriverInterface
+	 * @param LockerInterface $locker
+	 * @param string          $id
+	 * @param string          $context
+	 * @param int|null        $retries
+	 * @param int|null        $retryInterval
+	 * @return DriverInterface
 	 */
-	public function __construct(
-		Tx_RsLock_Locking_LockerInterface $locker, $id, $context, $retries = NULL, $retryInterval = NULL
-	);
+	public function __construct(LockerInterface $locker, $id, $context, $retries = NULL, $retryInterval = NULL);
 
 	/**
 	 * Perform shutdown tasks.
@@ -58,7 +60,7 @@ interface Tx_RsLock_Locking_Driver_DriverInterface extends Tx_RsLock_Locking_Dri
 	/**
 	 * Get parent lock api class.
 	 *
-	 * @return Tx_RsLock_Locking_LockerInterface
+	 * @return LockerInterface
 	 */
 	public function getLocker();
 

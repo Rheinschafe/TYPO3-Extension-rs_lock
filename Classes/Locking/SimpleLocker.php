@@ -1,5 +1,10 @@
 <?php
 
+namespace Rheinschafe\RsLock\Locking;
+
+use Rheinschafe\RsLock\Locking\Driver\DriverInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -32,29 +37,29 @@
  * @license    http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @author     Daniel Hürtgen <huertgen@rheinschafe.de>
  */
-class Tx_RsLock_Locking_SimpleLocker extends Tx_RsLock_Locking_AbstractLocker implements Tx_RsLock_Locking_SimpleLockerInterface {
+class SimpleLocker extends AbstractLocker implements SimpleLockerInterface {
 
 	/**
-	 * @var Tx_RsLock_Locking_Driver_DriverInterface
+	 * @var DriverInterface
 	 */
 	private $driver;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param mixed                                           $id      Unique id used for locking.
-	 * @param string|Tx_RsLock_Locking_Driver_DrvierInterface $driver  Driver class object or string.
-	 * @param string                                          $context Locking context/prefix.
-	 * @param null                                            $loops   Times a lock is tried to acuqire.
-	 * @param null                                            $steps   Milliseconds to sleep between looping.
-	 * @throws InvalidArgumentException
-	 * @return Tx_RsLock_Locking_SimpleLocker
+	 * @param mixed                  $id      Unique id used for locking.
+	 * @param string|DriverInterface $driver  Driver class object or string.
+	 * @param string                 $context Locking context/prefix.
+	 * @param null                   $loops   Times a lock is tried to acuqire.
+	 * @param null                   $steps   Milliseconds to sleep between looping.
+	 * @throws \InvalidArgumentException
+	 * @return SimpleLocker
 	 * @see Tx_RsLock_Locking_LockerInterface::__construct()
 	 */
 	public function __construct($id, $driver, $context, $loops = NULL, $steps = NULL) {
-		if ($driver instanceof Tx_RsLock_Locking_Driver_DriverInterface) {
+		if ($driver instanceof DriverInterface) {
 			$this->driver = $driver;
-		} else if (!$driver instanceof Tx_RsLock_Locking_Driver_DriverInterface && is_string($driver)) {
+		} else if (!$driver instanceof DriverInterface && is_string($driver)) {
 			$this->driver = $this->_getDriverInstance(
 				$driver,
 				array(
@@ -66,9 +71,9 @@ class Tx_RsLock_Locking_SimpleLocker extends Tx_RsLock_Locking_AbstractLocker im
 				)
 			);
 		} else {
-			throw new InvalidArgumentException(
+			throw new \InvalidArgumentException(
 				sprintf(
-					'Invalid driver "%s" given. Driver must be implement "Tx_RsLock_Locking_Driver_DriverInterface".',
+					'Invalid driver "%s" given. Driver must be implement "Rheinschafe\\RsLock\\Locking\\Driver\\DriverInterface".',
 					(is_object($driver) ? get_class($driver) : $driver)
 				)
 			);
@@ -78,8 +83,8 @@ class Tx_RsLock_Locking_SimpleLocker extends Tx_RsLock_Locking_AbstractLocker im
 	/**
 	 * Get driver.
 	 *
-	 * @return Tx_RsLock_Locking_Driver_DriverInterface
-	 * @see Tx_RsLock_Locking_LockerInterface::getDriver()
+	 * @return DriverInterface
+	 * @see Locker::getDriver()
 	 */
 	public function getDriver() {
 		return $this->driver;
@@ -97,7 +102,7 @@ class Tx_RsLock_Locking_SimpleLocker extends Tx_RsLock_Locking_AbstractLocker im
 		if (!$this->isSysLoggingEnabled()) {
 			return;
 		}
-		t3lib_div::sysLog(
+		GeneralUtility::sysLog(
 			'[' . $this->getDriver()->getContext() . ' : ' . $this->getDriver()->getIdHash() . '] ' . $message,
 			$this->getSyslogFacility(),
 			$severity

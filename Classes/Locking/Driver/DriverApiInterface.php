@@ -1,5 +1,7 @@
 <?php
 
+namespace Rheinschafe\RsLock\Locking\Driver;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -32,7 +34,7 @@
  * @license    http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @author     Daniel Hürtgen <huertgen@rheinschafe.de>
  */
-interface Tx_RsLock_Locking_Driver_DriverApiInterface {
+interface DriverApiInterface {
 
 	/**
 	 * Acquire lock.

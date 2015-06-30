@@ -1,5 +1,13 @@
 <?php
 
+namespace Rheinschafe\RsLock\Locking\Adapter;
+
+use Rheinschafe\RsLock\Locking\Driver\DriverApiInterface;
+use Rheinschafe\RsLock\Locking\Driver\DriverInterface;
+use Rheinschafe\RsLock\Locking\SimpleLockerInterface;
+use TYPO3\CMS\Core\Locking\Locker as CoreLocker;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -25,36 +33,36 @@
  ***************************************************************/
 
 /**
- * Typo3 adapter to fit function 'instanceof' t3lib_lock.
- *  X-Class must extend t3lib_lock!
+ * Typo3 adapter to fit function 'instanceof' \TYPO3\CMS\Core\Locking\Locker.
+ *  X-Class must extend \TYPO3\CMS\Core\Locking\Locker!
  *
  * @package    rs_lock
  * @subpackage Locking/Adapter
  * @license    http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @author     Daniel Hürtgen <huertgen@rheinschafe.de>
  */
-class Tx_RsLock_Locking_Adapter_Typo3Adapter extends t3lib_lock implements Tx_RsLock_Locking_Adapter_Typo3AdapterInterface {
+class Typo3Adapter extends CoreLocker implements Typo3AdapterInterface {
 
 	/**
 	 * Get real simple locker object.
 	 *
-	 * @var Tx_RsLock_Locking_SimpleLockerInterface
+	 * @var SimpleLockerInterface
 	 */
 	private $locker;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param mixed                                           $id     Unique id used for locking.
-	 * @param string|Tx_RsLock_Locking_Driver_DrvierInterface $driver Driver class object or string.
-	 * @param null                                            $loops  Times a lock is tried to acuqire.
-	 * @param null                                            $steps  Milliseconds to sleep between looping.
-	 * @return Tx_RsLock_Locking_Adapter_Typo3Adapter
+	 * @param mixed                  $id     Unique id used for locking.
+	 * @param string|DriverInterface $driver Driver class object or string.
+	 * @param null                   $loops  Times a lock is tried to acuqire.
+	 * @param null                   $steps  Milliseconds to sleep between looping.
+	 * @return Typo3Adapter
 	 */
 	public function __construct($id, $driver, $loops = NULL, $steps = NULL) {
 		$context = $this->_determineLockingContext();
-		$this->locker = t3lib_div::makeInstance(
-			'Tx_RsLock_Locking_SimpleLocker',
+		$this->locker = GeneralUtility::makeInstance(
+			'Rheinschafe\\RsLock\\Locking\\SimpleLocker',
 			$id,
 			$driver,
 			$context,
@@ -141,7 +149,7 @@ class Tx_RsLock_Locking_Adapter_Typo3Adapter extends t3lib_lock implements Tx_Rs
 	/**
 	 * Get real locker object.
 	 *
-	 * @return Tx_RsLock_Locking_SimpleLockerInterface
+	 * @return SimpleLockerInterface
 	 */
 	public function getLocker() {
 		return $this->locker;
@@ -150,7 +158,7 @@ class Tx_RsLock_Locking_Adapter_Typo3Adapter extends t3lib_lock implements Tx_Rs
 	/**
 	 * Get driver object.
 	 *
-	 * @return Tx_RsLock_Locking_Driver_DriverInterface
+	 * @return DriverInterface
 	 */
 	public function getDriver() {
 		return $this->locker->getDriver();
@@ -163,7 +171,7 @@ class Tx_RsLock_Locking_Adapter_Typo3Adapter extends t3lib_lock implements Tx_Rs
 	 *
 	 * @return boolean Return TRUE, if lock was acquired without waiting for other clients/instances, otherwise, if the client
 	 *                 was waiting, return FALSE.
-	 * @see Tx_RsLock_Locking_Adapter_Typo3AdapterInterface::acquire()
+	 * @see Typo3AdapterInterface::acquire()
 	 */
 	public function acquire() {
 		$this->getDriver()->acquire();
@@ -173,7 +181,7 @@ class Tx_RsLock_Locking_Adapter_Typo3Adapter extends t3lib_lock implements Tx_Rs
 	 * Release lock.
 	 *
 	 * @return boolean TRUE if locked was release, otherwise throw lock exception.
-	 * @see Tx_RsLock_Locking_Adapter_Typo3AdapterInterface::release()
+	 * @see Typo3AdapterInterface::release()
 	 */
 	public function release() {
 		$this->getDriver()->release();
@@ -183,7 +191,7 @@ class Tx_RsLock_Locking_Adapter_Typo3Adapter extends t3lib_lock implements Tx_Rs
 	 * Return the unique identifier used for locking.
 	 *
 	 * @return string
-	 * @see Tx_RsLock_Locking_Adapter_Typo3AdapterInterface::getMethod()
+	 * @see Typo3AdapterInterface::getMethod()
 	 */
 	public function getMethod() {
 		return $this->getDriver()->getType();
@@ -193,7 +201,7 @@ class Tx_RsLock_Locking_Adapter_Typo3Adapter extends t3lib_lock implements Tx_Rs
 	 * Return the unique identifier used for locking.
 	 *
 	 * @return string
-	 * @see Tx_RsLock_Locking_Adapter_Typo3AdapterInterface::getId()
+	 * @see Typo3AdapterInterface::getId()
 	 */
 	public function getId() {
 		$this->getDriver()->getId();
@@ -204,10 +212,10 @@ class Tx_RsLock_Locking_Adapter_Typo3Adapter extends t3lib_lock implements Tx_Rs
 	 * Depending on the locking method this can be a filename or a semaphore resource.
 	 *
 	 * @return mixed
-	 * @see Tx_RsLock_Locking_Adapter_Typo3AdapterInterface::getResource()
+	 * @see Typo3AdapterInterface::getResource()
 	 */
 	public function getResource() {
-		if ($this->getDriver() instanceof Tx_RsLock_Locking_Driver_Typo3_DriverApiInterface) {
+		if ($this->getDriver() instanceof DriverApiInterface) {
 			return $this->getDriver()->getResource();
 		}
 
@@ -218,7 +226,7 @@ class Tx_RsLock_Locking_Adapter_Typo3Adapter extends t3lib_lock implements Tx_Rs
 	 * Return the lock status.
 	 *
 	 * @return string Returns TRUE if lock is acquired, otherwise FALSE.
-	 * @see Tx_RsLock_Locking_Adapter_Typo3AdapterInterface::getLockStatus()
+	 * @see Typo3AdapterInterface::getLockStatus()
 	 */
 	public function getLockStatus() {
 		return $this->getDriver()->isAcquired();
@@ -229,7 +237,7 @@ class Tx_RsLock_Locking_Adapter_Typo3Adapter extends t3lib_lock implements Tx_Rs
 	 *
 	 * @param string $syslogFacility
 	 * @return void
-	 * @see Tx_RsLock_Locking_Adapter_Typo3AdapterInterface::setSyslogFacility()
+	 * @see Typo3AdapterInterface::setSyslogFacility()
 	 */
 	public function setSyslogFacility($syslogFacility) {
 		$this->getLocker()->setSyslogFacility($syslogFacility);
@@ -240,7 +248,7 @@ class Tx_RsLock_Locking_Adapter_Typo3Adapter extends t3lib_lock implements Tx_Rs
 	 *
 	 * @param boolean $isLoggingEnabled TRUE to enable, FALSE to disable.
 	 * @return void
-	 * @see Tx_RsLock_Locking_Adapter_Typo3AdapterInterface::setEnableLogging()
+	 * @see Typo3AdapterInterface::setEnableLogging()
 	 */
 	public function setEnableLogging($isLoggingEnabled) {
 		$this->setEnableSysLogging($isLoggingEnabled);
@@ -253,7 +261,7 @@ class Tx_RsLock_Locking_Adapter_Typo3Adapter extends t3lib_lock implements Tx_Rs
 	 * @param string  $message  The message to be logged.
 	 * @param integer $severity Severity - 0 is info (default), 1 is notice, 2 is warning, 3 is error, 4 is fatal error.
 	 * @return void
-	 * @see Tx_RsLock_Locking_Adapter_Typo3AdapterInterface::sysLog()
+	 * @see Typo3AdapterInterface::sysLog()
 	 */
 	public function sysLog($message, $severity = 0) {
 		$this->getLocker()->_log($message, $severity);

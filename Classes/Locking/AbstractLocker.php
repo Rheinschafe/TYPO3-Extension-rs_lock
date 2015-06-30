@@ -1,5 +1,10 @@
 <?php
 
+namespace Rheinschafe\RsLock\Locking;
+
+use Rheinschafe\RsLock\Locking\Driver\DriverInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -32,7 +37,7 @@
  * @license    http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @author     Daniel Hürtgen <huertgen@rheinschafe.de>
  */
-abstract class Tx_RsLock_Locking_AbstractLocker implements Tx_RsLock_Locking_LockerInterface {
+abstract class AbstractLocker implements LockerInterface {
 
 	/**
 	 * SysLogging enabled?
@@ -53,33 +58,33 @@ abstract class Tx_RsLock_Locking_AbstractLocker implements Tx_RsLock_Locking_Loc
 	 *
 	 * @param string $name String with driver-name.
 	 * @param array  $args Args passed to driver constructor (required: $id, optional: $loops, $steps)
-	 * @throws InvalidArgumentException
+	 * @throws \InvalidArgumentException
 	 * @todo maybe use typo3 services to manage overloading
-	 * @return Tx_RsLock_Locking_Driver_DriverInterface
+	 * @return DriverInterface
 	 */
 	protected function _getDriverInstance($name, array $args = array()) {
 		$driverMapping = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rs_lock']['driverMapping'];
 
-		$driverClass = 'Tx_RsLock_Locking_Driver_FileDriver';
+		$driverClass = 'Rheinschafe\\RsLock\\Locking\\Driver\\FileDriver';
 		if (isset($driverMapping[$name])) {
 			$driverClass = $driverMapping[$name];
 
-			$r = new ReflectionClass($driverClass);
-			if (!$r->implementsInterface('Tx_RsLock_Locking_Driver_DriverInterface')) {
-				throw new InvalidArgumentException(
+			$r = new \ReflectionClass($driverClass);
+			if (!$r->implementsInterface('Rheinschafe\RsLock\Locking\Driver\DriverInterface')) {
+				throw new \InvalidArgumentException(
 					sprintf(
-						'Class "%s" must implement "Tx_RsLock_Locking_Driver_DriverInterface".',
+						'Class "%s" must implement "Rheinschafe\\RsLock\\Locking\\Driver\\DriverInterface".',
 						$driverClass
 					)
 				);
 			}
 		}
 
-		/** @var $driver Tx_RsLock_Locking_Driver_DriverInterface */
+		/** @var $driver DriverInterface */
 		array_unshift($args, $driverClass);
 		$driver = call_user_func_array(
 			array(
-				't3lib_div',
+				'TYPO3\\CMS\\Core\\Utility\\GeneralUtility',
 				'makeInstance'
 			),
 			$args
@@ -92,7 +97,7 @@ abstract class Tx_RsLock_Locking_AbstractLocker implements Tx_RsLock_Locking_Loc
 	 * Get the facility (extension name) for the syslog entry.
 	 *
 	 * @return string
-	 * @see Tx_RsLock_Locking_LockerInterface::getSyslogFacility()
+	 * @see LockerInterface::getSyslogFacility()
 	 */
 	public function getSyslogFacility() {
 		$this->_sysLoggingFacility;
@@ -103,7 +108,7 @@ abstract class Tx_RsLock_Locking_AbstractLocker implements Tx_RsLock_Locking_Loc
 	 *
 	 * @param string $sysLogFacility
 	 * @return void
-	 * @see Tx_RsLock_Locking_LockerInterface::setSyslogFacility()
+	 * @see LockerInterface::setSyslogFacility()
 	 */
 	public function setSyslogFacility($sysLogFacility) {
 		$this->_sysLoggingFacility = (string) $sysLogFacility;
@@ -114,7 +119,7 @@ abstract class Tx_RsLock_Locking_AbstractLocker implements Tx_RsLock_Locking_Loc
 	 *
 	 * @param boolean $state TRUE to enable, FALSE to disable.
 	 * @return void
-	 * @see Tx_RsLock_Locking_LockerInterface::setEnableSysLogging()
+	 * @see LockerInterface::setEnableSysLogging()
 	 */
 	public function setEnableSysLogging($state = TRUE) {
 		$this->_doSysLogging = (boolean) $state;
@@ -124,14 +129,14 @@ abstract class Tx_RsLock_Locking_AbstractLocker implements Tx_RsLock_Locking_Loc
 	 * Return if syslogging is enabled.
 	 *
 	 * @return boolean
-	 * @see Tx_RsLock_Locking_LockerInterface::isSysLoggingEnabled()
+	 * @see LockerInterface::isSysLoggingEnabled()
 	 */
 	public function isSysLoggingEnabled() {
 		return $this->_doSysLogging;
 	}
 
 	/**
-	 * Adds a common log entry for this locking API using t3lib_div::sysLog().
+	 * Adds a common log entry for this locking API using GeneralUtility::sysLog().
 	 * Example: 01-01-13 20:00 - cms: Locking [simple::0aeafd2a67a6bb8b9543fb9ea25ecbe2]: Acquired
 	 *
 	 * @param string  $message  The message to be logged.
@@ -142,7 +147,7 @@ abstract class Tx_RsLock_Locking_AbstractLocker implements Tx_RsLock_Locking_Loc
 		if (!$this->isSysLoggingEnabled()) {
 			return;
 		}
-		t3lib_div::sysLog($message, $this->getSyslogFacility(), $severity);
+		GeneralUtility::sysLog($message, $this->getSyslogFacility(), $severity);
 	}
 
 }
