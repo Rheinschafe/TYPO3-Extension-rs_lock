@@ -23,6 +23,7 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
 /**
  * MySQL-Locking-Driver class.
  *  Main locking method: mysql table
@@ -76,7 +77,8 @@ class Tx_RsLock_Locking_Driver_MySQLDriver extends Tx_RsLock_Locking_Driver_Abst
 	 *  throw an runtime exception, but do NOT return FALSE on fail!
 	 *
 	 * @throws Exception
-	 * @return boolean TRUE, if lock was acquired without waiting for other clients/instances, otherwise, if the client was waiting, return FALSE.
+	 * @return boolean TRUE, if lock was acquired without waiting for other clients/instances, otherwise, if the client was
+	 *                 waiting, return FALSE.
 	 */
 	public function acquire() {
 		$noWait = TRUE;
@@ -223,10 +225,13 @@ class Tx_RsLock_Locking_Driver_MySQLDriver extends Tx_RsLock_Locking_Driver_Abst
 		$sql = array();
 		$sql['table'] = $this->_lockTableName;
 		$sql['fields'] = $this->_lockTableName . '.' . $this->_hashTableField . ', ' . $this->_lockTableName . '.' . $this->_createdAtTableField;
-		$sql['where'] = $this->_lockTableName . '.' . $this->_hashTableField . ' = ' . $this->_getTypo3Db()
-				->fullQuoteStr($this->getIdHash(), $this->_lockTableName);
+		$sql['where'] = $this->_lockTableName . '.' . $this->_hashTableField . ' = ' . $this->_getTypo3Db()->fullQuoteStr(
+					$this->getIdHash(),
+					$this->_lockTableName
+				);
 		if ($useMaxAgeClause) {
-			$sql['where'] .= ' AND ' . $this->_lockTableName . '.' . $this->_createdAtTableField . $comparisonMaxAgeClause . $this->_getMaxAge();
+			$sql['where'] .= ' AND ' . $this->_lockTableName . '.' . $this->_createdAtTableField . $comparisonMaxAgeClause . $this->_getMaxAge(
+				);
 		}
 
 		// exec & return result
@@ -240,8 +245,10 @@ class Tx_RsLock_Locking_Driver_MySQLDriver extends Tx_RsLock_Locking_Driver_Abst
 	 */
 	protected function _deleteLockRecordFromDb() {
 		// delete where clause
-		$sqlWhere = $this->_lockTableName . '.' . $this->_hashTableField . '=' . $this->_getTypo3Db()
-				->fullQuoteStr($this->getIdHash(), $this->_lockTableName);
+		$sqlWhere = $this->_lockTableName . '.' . $this->_hashTableField . '=' . $this->_getTypo3Db()->fullQuoteStr(
+					$this->getIdHash(),
+					$this->_lockTableName
+				);
 
 		// execute delete
 		$this->_getTypo3Db()->exec_DELETEquery($this->_lockTableName, $sqlWhere);

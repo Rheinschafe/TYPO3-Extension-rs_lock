@@ -23,6 +23,7 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
 /**
  * Locking-Driver-API interface.
  *
@@ -38,7 +39,8 @@ interface Tx_RsLock_Locking_Driver_DriverApiInterface {
 	 *  Tries to acquire locking. It is very important, that the lock will be generated. If something went wrong,
 	 *  throw an runtime exception, but do NOT return FALSE on fail!
 	 *
-	 * @return boolean TRUE, if lock was acquired without waiting for other clients/instances, otherwise, if the client was waiting, return FALSE.
+	 * @return boolean TRUE, if lock was acquired without waiting for other clients/instances, otherwise, if the client was
+	 *                 waiting, return FALSE.
 	 */
 	public function acquire();
 

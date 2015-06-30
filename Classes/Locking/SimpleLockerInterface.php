@@ -23,6 +23,7 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
 /**
  * Simple (single) locker interface.
  *
@@ -51,4 +52,5 @@ interface Tx_RsLock_Locking_SimpleLockerInterface extends Tx_RsLock_Locking_Lock
 	 * @return Tx_RsLock_Locking_Driver_DriverInterface
 	 */
 	public function getDriver();
+
 }

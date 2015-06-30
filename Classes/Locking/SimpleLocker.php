@@ -23,6 +23,7 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
 /**
  * Locker wrapper class for single (simple) locking.
  *
@@ -31,8 +32,7 @@
  * @license    http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @author     Daniel Hürtgen <huertgen@rheinschafe.de>
  */
-class Tx_RsLock_Locking_SimpleLocker extends Tx_RsLock_Locking_AbstractLocker
-	implements Tx_RsLock_Locking_SimpleLockerInterface {
+class Tx_RsLock_Locking_SimpleLocker extends Tx_RsLock_Locking_AbstractLocker implements Tx_RsLock_Locking_SimpleLockerInterface {
 
 	/**
 	 * @var Tx_RsLock_Locking_Driver_DriverInterface
@@ -55,16 +55,23 @@ class Tx_RsLock_Locking_SimpleLocker extends Tx_RsLock_Locking_AbstractLocker
 		if ($driver instanceof Tx_RsLock_Locking_Driver_DriverInterface) {
 			$this->driver = $driver;
 		} else if (!$driver instanceof Tx_RsLock_Locking_Driver_DriverInterface && is_string($driver)) {
-			$this->driver = $this->_getDriverInstance($driver, array(
-																	$this,
-																	$id,
-																	$context,
-																	$loops,
-																	$steps
-															   ));
+			$this->driver = $this->_getDriverInstance(
+				$driver,
+				array(
+					$this,
+					$id,
+					$context,
+					$loops,
+					$steps
+				)
+			);
 		} else {
-			throw new InvalidArgumentException(sprintf('Invalid driver "%s" given. Driver must be implement "Tx_RsLock_Locking_Driver_DriverInterface".',
-				(is_object($driver) ? get_class($driver) : $driver)));
+			throw new InvalidArgumentException(
+				sprintf(
+					'Invalid driver "%s" given. Driver must be implement "Tx_RsLock_Locking_Driver_DriverInterface".',
+					(is_object($driver) ? get_class($driver) : $driver)
+				)
+			);
 		}
 	}
 
@@ -90,8 +97,11 @@ class Tx_RsLock_Locking_SimpleLocker extends Tx_RsLock_Locking_AbstractLocker
 		if (!$this->isSysLoggingEnabled()) {
 			return;
 		}
-		t3lib_div::sysLog('[' . $this->getDriver()->getContext() . ' : ' . $this->getDriver()
-				->getIdHash() . '] ' . $message, $this->getSyslogFacility(), $severity);
+		t3lib_div::sysLog(
+			'[' . $this->getDriver()->getContext() . ' : ' . $this->getDriver()->getIdHash() . '] ' . $message,
+			$this->getSyslogFacility(),
+			$severity
+		);
 	}
 
 }

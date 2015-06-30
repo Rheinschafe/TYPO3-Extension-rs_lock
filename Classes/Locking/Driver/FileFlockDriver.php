@@ -23,6 +23,7 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
 /**
  * File-Flock-Locking-Driver class.
  *  Main locking method: function flock()
@@ -62,7 +63,8 @@ class Tx_RsLock_Locking_Driver_FileFlockDriver extends Tx_RsLock_Locking_Driver_
 	 *  throw an runtime exception, but do NOT return FALSE on fail!
 	 *
 	 * @throws Exception
-	 * @return boolean TRUE, if lock was acquired without waiting for other clients/instances, otherwise, if the client was waiting, return FALSE.
+	 * @return boolean TRUE, if lock was acquired without waiting for other clients/instances, otherwise, if the client was
+	 *                 waiting, return FALSE.
 	 */
 	public function acquire() {
 		$noWait = TRUE;

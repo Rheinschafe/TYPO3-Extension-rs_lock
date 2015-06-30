@@ -23,6 +23,7 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
 /**
  * Semaphore-Locking-Driver class.
  *  Main locking method: function sem_acquire()

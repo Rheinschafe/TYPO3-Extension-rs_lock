@@ -23,6 +23,7 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
 /**
  * Locker interface.
  *
@@ -62,4 +63,5 @@ interface Tx_RsLock_Locking_LockerInterface {
 	 * @return boolean
 	 */
 	public function isSysLoggingEnabled();
+
 }

@@ -23,6 +23,7 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
 /**
  * Abstract-File-Locking-Driver class.
  *
@@ -85,8 +86,12 @@ abstract class Tx_RsLock_Locking_Driver_AbstractFileDriver extends Tx_RsLock_Loc
 	public function getValidFilePath() {
 		if (!t3lib_div::isFirstPartOfStr($this->getFilePath(), $this->getPath())
 		) {
-			throw new RuntimeException(sprintf('Current file-path "%s" is not a valid file-path.',
-											   $this->getFilePath()));
+			throw new RuntimeException(
+				sprintf(
+					'Current file-path "%s" is not a valid file-path.',
+					$this->getFilePath()
+				)
+			);
 		}
 
 		return $this->getFilePath();

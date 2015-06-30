@@ -23,6 +23,7 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
 /**
  * File-Locking-Driver class.
  *  Main locking method: function is_file(), file_exists(), etc
@@ -50,7 +51,8 @@ class Tx_RsLock_Locking_Driver_FileDriver extends Tx_RsLock_Locking_Driver_Abstr
 	 *  throw an runtime exception, but do NOT return FALSE on fail!
 	 *
 	 * @throws Exception
-	 * @return boolean TRUE, if lock was acquired without waiting for other clients/instances, otherwise, if the client was waiting, return FALSE.
+	 * @return boolean TRUE, if lock was acquired without waiting for other clients/instances, otherwise, if the client was
+	 *                 waiting, return FALSE.
 	 * @see  Tx_RsLock_Locking_Driver_DriverInterface::acquire()
 	 * @todo implement logging
 	 */

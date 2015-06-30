@@ -23,6 +23,7 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
 /**
  * Abstract locker wrapper class.
  *
@@ -65,17 +66,24 @@ abstract class Tx_RsLock_Locking_AbstractLocker implements Tx_RsLock_Locking_Loc
 
 			$r = new ReflectionClass($driverClass);
 			if (!$r->implementsInterface('Tx_RsLock_Locking_Driver_DriverInterface')) {
-				throw new InvalidArgumentException(sprintf('Class "%s" must implement "Tx_RsLock_Locking_Driver_DriverInterface".',
-														   $driverClass));
+				throw new InvalidArgumentException(
+					sprintf(
+						'Class "%s" must implement "Tx_RsLock_Locking_Driver_DriverInterface".',
+						$driverClass
+					)
+				);
 			}
 		}
 
 		/** @var $driver Tx_RsLock_Locking_Driver_DriverInterface */
 		array_unshift($args, $driverClass);
-		$driver = call_user_func_array(array(
-											't3lib_div',
-											'makeInstance'
-									   ), $args);
+		$driver = call_user_func_array(
+			array(
+				't3lib_div',
+				'makeInstance'
+			),
+			$args
+		);
 
 		return $driver;
 	}

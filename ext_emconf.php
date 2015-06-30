@@ -11,31 +11,29 @@
  ***************************************************************/
 
 $EM_CONF[$_EXTKEY] = array(
-	'title' => 'RS | Advanced TYPO3 Locking',
-	'description' => 'Features TYPO3 with an advanced and rewritten locking. TYPO3 offers locking methods are: simple (is_file method), flock (filesystem locking attributes) and semaphore (System V IPC Key). These three drivers are rewritten into an adaptive driver api to boost performance and abstraction. There is also a new driver for MySQL Locking through an InnoDB table called \'sys_lock\'. Very extendable structure, even if this is an really really initial version. Try & Fail :-)',
-	'category' => 'fe',
-	'author' => 'Daniel Hürtgen',
-	'author_email' => 'huertgen@rheinschafe.de',
-	'author_company' => 'Rheinschafe GmbH',
-	'shy' => '',
-	'priority' => '',
-	'module' => '',
-	'state' => 'stable',
-	'internal' => '',
-	'uploadfolder' => 0,
-	'createDirs' => '',
-	'modify_tables' => '',
-	'clearCacheOnLoad' => 1,
-	'lockType' => '',
-	'version' => '1.0.1',
-	'constraints' => array(
-		'depends' => array(
+	'title'                         => 'RS | Advanced TYPO3 Locking',
+	'description'                   => 'Features TYPO3 with an advanced and rewritten locking. TYPO3 offers locking methods are: simple (is_file method), flock (filesystem locking attributes) and semaphore (System V IPC Key). These three drivers are rewritten into an adaptive driver api to boost performance and abstraction. There is also a new driver for MySQL Locking through an InnoDB table called \'sys_lock\'. Very extendable structure, even if this is an really really initial version. Try & Fail :-)',
+	'category'                      => 'fe',
+	'author'                        => 'Daniel Hürtgen',
+	'author_email'                  => 'huertgen@rheinschafe.de',
+	'author_company'                => 'Rheinschafe GmbH',
+	'shy'                           => '',
+	'priority'                      => '',
+	'module'                        => '',
+	'state'                         => 'stable',
+	'internal'                      => '',
+	'uploadfolder'                  => 0,
+	'createDirs'                    => '',
+	'modify_tables'                 => '',
+	'clearCacheOnLoad'              => 1,
+	'lockType'                      => '',
+	'version'                       => '1.0.1',
+	'constraints'                   => array(
+		'depends'   => array(
 			'typo3' => '4.5.0-4.7.99',
 		),
-		'conflicts' => array(
-		),
-		'suggests' => array(
-		),
+		'conflicts' => array(),
+		'suggests'  => array(),
 	),
 	'_md5_values_when_last_written' => '',
 );

@@ -23,6 +23,7 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
 /**
  * Locking-Driver interface.
  *
@@ -43,8 +44,9 @@ interface Tx_RsLock_Locking_Driver_DriverInterface extends Tx_RsLock_Locking_Dri
 	 * @param int|null                          $retryInterval
 	 * @return Tx_RsLock_Locking_Driver_DriverInterface
 	 */
-	public function __construct(Tx_RsLock_Locking_LockerInterface $locker, $id, $context, $retries = NULL,
-		$retryInterval = NULL);
+	public function __construct(
+		Tx_RsLock_Locking_LockerInterface $locker, $id, $context, $retries = NULL, $retryInterval = NULL
+	);
 
 	/**
 	 * Perform shutdown tasks.

@@ -23,6 +23,7 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
 /**
  * Abstract Locking-Driver class.
  *
@@ -31,8 +32,7 @@
  * @license    http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @author     Daniel Hürtgen <huertgen@rheinschafe.de>
  */
-abstract class Tx_RsLock_Locking_Driver_AbstractDriver extends t3lib_svbase
-	implements Tx_RsLock_Locking_Driver_DriverInterface {
+abstract class Tx_RsLock_Locking_Driver_AbstractDriver extends t3lib_svbase implements Tx_RsLock_Locking_Driver_DriverInterface {
 
 	/**
 	 * Unique identifier.
@@ -86,8 +86,7 @@ abstract class Tx_RsLock_Locking_Driver_AbstractDriver extends t3lib_svbase
 	 * @param int|null                          $retryInterval
 	 * @return Tx_RsLock_Locking_Driver_AbstractDriver
 	 */
-	public function __construct(Tx_RsLock_Locking_LockerInterface $locker, $id, $context, $retries = NULL,
-		$retryInterval = NULL) {
+	public function __construct(Tx_RsLock_Locking_LockerInterface $locker, $id, $context, $retries = NULL, $retryInterval = NULL) {
 		$this->_locker = $locker;
 		$this->_id = (string) $id;
 		$this->_context = (string) $context;
@@ -95,10 +94,12 @@ abstract class Tx_RsLock_Locking_Driver_AbstractDriver extends t3lib_svbase
 		$this->setRetries($retries);
 		$this->setRetryInterval($retryInterval);
 
-		register_shutdown_function(array(
-										$this,
-										'shutdown'
-								   ));
+		register_shutdown_function(
+			array(
+				$this,
+				'shutdown'
+			)
+		);
 	}
 
 	/**
@@ -175,6 +176,7 @@ abstract class Tx_RsLock_Locking_Driver_AbstractDriver extends t3lib_svbase
 	 */
 	protected function _getMaxAge() {
 		$maxExecutionTime = ini_get('max_execution_time');
+
 		return time() - ($maxExecutionTime ? $maxExecutionTime : 120);
 	}
 

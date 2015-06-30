@@ -23,6 +23,7 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
 /**
  * Typo3 adapter to fit function 'instanceof' t3lib_lock.
  *  X-Class must extend t3lib_lock!
@@ -32,8 +33,7 @@
  * @license    http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @author     Daniel Hürtgen <huertgen@rheinschafe.de>
  */
-class Tx_RsLock_Locking_Adapter_Typo3Adapter extends t3lib_lock
-	implements Tx_RsLock_Locking_Adapter_Typo3AdapterInterface {
+class Tx_RsLock_Locking_Adapter_Typo3Adapter extends t3lib_lock implements Tx_RsLock_Locking_Adapter_Typo3AdapterInterface {
 
 	/**
 	 * Get real simple locker object.
@@ -53,8 +53,14 @@ class Tx_RsLock_Locking_Adapter_Typo3Adapter extends t3lib_lock
 	 */
 	public function __construct($id, $driver, $loops = NULL, $steps = NULL) {
 		$context = $this->_determineLockingContext();
-		$this->locker = t3lib_div::makeInstance('Tx_RsLock_Locking_SimpleLocker', $id, $driver, $context, $loops,
-												$steps);
+		$this->locker = t3lib_div::makeInstance(
+			'Tx_RsLock_Locking_SimpleLocker',
+			$id,
+			$driver,
+			$context,
+			$loops,
+			$steps
+		);
 	}
 
 	/**
@@ -155,7 +161,8 @@ class Tx_RsLock_Locking_Adapter_Typo3Adapter extends t3lib_lock
 	 *  Tries to acquire locking. It is very important, that the lock will be generated. If something went wrong,
 	 *  throw an runtime exception, but do NOT return FALSE on fail!
 	 *
-	 * @return boolean Return TRUE, if lock was acquired without waiting for other clients/instances, otherwise, if the client was waiting, return FALSE.
+	 * @return boolean Return TRUE, if lock was acquired without waiting for other clients/instances, otherwise, if the client
+	 *                 was waiting, return FALSE.
 	 * @see Tx_RsLock_Locking_Adapter_Typo3AdapterInterface::acquire()
 	 */
 	public function acquire() {
