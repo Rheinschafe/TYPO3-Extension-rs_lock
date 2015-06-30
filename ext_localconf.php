@@ -36,10 +36,9 @@ if (!defined('TYPO3_MODE')) {
 	die ('Access denied.');
 }
 
-// X-Class implementation for t3lib_lock class (ux_t3lib_lock)
-$GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['t3lib/class.t3lib_lock.php'] = t3lib_extMgm::extPath(
-	$_EXTKEY,
-	'Classes/Legacy/class.ux_t3lib_lock.php'
+// X-Class implementation for TYPO3\CMS\Core\Locking\Locker class
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Core\\Locking\\Locker'] = array(
+	'className' => 'Rheinschafe\\RsLock\\Locking\\Adapter\\Typo3Adapter'
 );
 
 // basic driver mapping
