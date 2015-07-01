@@ -4,7 +4,7 @@
 
 Breaking Changes:
 
-  - Drop support for TYPO3 =< 4.x
+  - Drop support for TYPO3 < 6.2.13
   
 Features:
 
