@@ -114,15 +114,15 @@ class Typo3Adapter extends CoreLocker implements Typo3AdapterInterface {
 	protected function _getLockingContextMapping() {
 		return array(
 			array(
-				'class'    => 't3lib_div',
+				'class'    => 'TYPO3\\CMS\\Core\\Utility\\GeneralUtility',
 				'function' => 'sysLog'
 			),
 			array(
-				'class'    => 'tslib_fe',
+				'class'    => 'TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController',
 				'function' => 'getFromCache'
 			),
 			array(
-				'class'    => 't3lib_mail_MboxTransport',
+				'class'    => 'TYPO3\\CMS\\Core\\Mail\\MboxTransport',
 				'function' => 'send'
 			),
 		);
