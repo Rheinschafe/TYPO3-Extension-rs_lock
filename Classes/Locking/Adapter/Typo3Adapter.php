@@ -233,7 +233,7 @@ class Typo3Adapter extends CoreLocker implements Typo3AdapterInterface {
 	 * @see Typo3AdapterInterface::setEnableLogging()
 	 */
 	public function setEnableLogging($isLoggingEnabled) {
-		$this->setEnableSysLogging($isLoggingEnabled);
+		$this->getLocker()->setEnableSysLogging($isLoggingEnabled);
 	}
 
 	/**
