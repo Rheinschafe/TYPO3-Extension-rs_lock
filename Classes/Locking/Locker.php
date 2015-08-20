@@ -11,6 +11,7 @@ namespace Rheinschafe\RsLock\Locking;
 
 use Rheinschafe\RsLock\Locking\Exception\LockAdapterException;
 use Rheinschafe\RsLock\Locking\Strategy\LockingStrategyInterface;
+use TYPO3\CMS\Core\Locking\Locker as CoreLocker;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -20,7 +21,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @author     Daniel Hürtgen <huertgen@rheinschafe.de>
  * @author     Florian in der Beek <inderbeek@rheinschafe.de>
  */
-class Locker {
+class Locker extends CoreLocker {
 
 	/**
 	 * Holds the locker factory instance
@@ -86,6 +87,16 @@ class Locker {
 		}
 		$this->method = $method;
 
+	}
+
+	/**
+	 * Destructor.
+	 * Releases lock automatically when instance is destroyed and release resources
+	 *
+	 * @return void
+	 */
+	public function __destruct() {
+		$this->release();
 	}
 
 	/**
