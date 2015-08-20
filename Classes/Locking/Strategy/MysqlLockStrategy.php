@@ -21,35 +21,35 @@ class MysqlLockStrategy implements LockingStrategyInterface {
 	 *
 	 * @var string
 	 */
-	protected $_lockTableName = 'sys_lock';
+	protected $lockTableName = 'sys_lock';
 
 	/**
 	 * Lock table hash field.
 	 *
 	 * @var string
 	 */
-	protected $_hashTableField = 'hash';
+	protected $hashTableField = 'hash';
 
 	/**
 	 * Lock table created_at field.
 	 *
 	 * @var string
 	 */
-	protected $_createdAtTableField = 'created_at';
+	protected $createdAtTableField = 'created_at';
 
 	/**
 	 * Lock table is_shared_lock field.
 	 *
 	 * @var string
 	 */
-	protected $_isSharedLockField = 'is_shared_lock';
+	protected $isSharedLockField = 'is_shared_lock';
 
 	/**
 	 * Lock table shared_lock_counter field.
 	 *
 	 * @var string
 	 */
-	protected $_sharedLockCounterField = 'shared_lock_counter';
+	protected $sharedLockCounterField = 'shared_lock_counter';
 
 	/**
 	 * @var bool True if lock is acquired
@@ -59,21 +59,21 @@ class MysqlLockStrategy implements LockingStrategyInterface {
 	/**
 	 * @var boolean
 	 */
-	private $_typo3DbDebugVar = FALSE;
+	private $typo3DbDebugVar = FALSE;
 
 	/**
 	 * Number of retries, if locking fails.
 	 *
 	 * @var int
 	 */
-	protected $_retries = 150;
+	protected $retries = 150;
 
 	/**
 	 * Number of milliseconds wait between retries.
 	 *
 	 * @var int
 	 */
-	protected $_retryInterval = 100;
+	protected $retryInterval = 100;
 
 	/**
 	 * @var string subject
@@ -111,20 +111,20 @@ class MysqlLockStrategy implements LockingStrategyInterface {
 		$noWait = TRUE;
 		$isAcquired = FALSE;
 
-		$row = $this->_getLockRecordFromDb(TRUE, '<', $mode);
+		$row = $this->getLockRecordFromDb(TRUE, '<', $mode);
 		// cleanup (GC)
 		if (FALSE !== $row) {
-			$this->_deleteLockRecordFromDb();
+			$this->deleteLockRecordFromDb();
 		}
 
 		// try to acquire lock
 		for ($i = 0; $i < $this->getRetries(); $i++) {
-			if ($this->_insertLockRecordIntoDb()) {
+			if ($this->insertLockRecordIntoDb()) {
 				$noWait = ($i === 0);
 				$isAcquired = TRUE;
 				break;
 			}
-			$this->_waitForRetry();
+			$this->waitForRetry();
 		}
 
 		// @todo write own exception class
@@ -144,7 +144,7 @@ class MysqlLockStrategy implements LockingStrategyInterface {
 	 */
 	public function release() {
 		// FIXME during php shutdown there is no database connection
-		if (!$this->_getTypo3Db() instanceof DatabaseConnection) {
+		if (!$this->getTypo3Db() instanceof DatabaseConnection) {
 			return FALSE;
 		}
 
@@ -152,7 +152,7 @@ class MysqlLockStrategy implements LockingStrategyInterface {
 
 		// if is acquired // release lock
 		if ($this->isAcquired()) {
-			if (!$this->_deleteLockRecordFromDb()) {
+			if (!$this->deleteLockRecordFromDb()) {
 				$isReleased = FALSE;
 			}
 		}
@@ -193,7 +193,7 @@ class MysqlLockStrategy implements LockingStrategyInterface {
 	 *
 	 * @return DatabaseConnection
 	 */
-	protected function _getTypo3Db() {
+	protected function getTypo3Db() {
 		return $GLOBALS['TYPO3_DB'];
 	}
 
@@ -202,41 +202,41 @@ class MysqlLockStrategy implements LockingStrategyInterface {
 	 *
 	 * @return boolean TRUE, if records affected, otherwise FALSE.
 	 */
-	protected function _deleteLockRecordFromDb() {
+	protected function deleteLockRecordFromDb() {
 		$mode = $this->lastUsedMode;
-		$lockdata = $row = $this->_getLockRecordFromDb(FALSE, '<', $mode);
+		$lockdata = $row = $this->getLockRecordFromDb(FALSE, '<', $mode);
 		$counter = 0;
-		if (array_key_exists($this->_sharedLockCounterField, $lockdata)) {
-			$counter = (int)$lockdata[$this->_sharedLockCounterField];
+		if (array_key_exists($this->sharedLockCounterField, $lockdata)) {
+			$counter = (int)$lockdata[$this->sharedLockCounterField];
 		}
 
 		if ($mode == self::LOCK_CAPABILITY_SHARED && $counter > 1) {
 			//If we have a shared lock we only must descrement the counter value
-			$sqlWhere = $this->_lockTableName . '.' . $this->_hashTableField . '=' . $this->_getTypo3Db()->fullQuoteStr(
+			$sqlWhere = $this->lockTableName . '.' . $this->hashTableField . '=' . $this->getTypo3Db()->fullQuoteStr(
 					$this->getIdHash(),
-					$this->_lockTableName
+					$this->lockTableName
 				) .
-				' AND ' . $this->_lockTableName . '.' . $this->_sharedLockCounterField;
+				' AND ' . $this->lockTableName . '.' . $this->sharedLockCounterField;
 
-			$this->_getTypo3Db()->exec_UPDATEquery(
-				$this->_lockTableName,
+			$this->getTypo3Db()->exec_UPDATEquery(
+				$this->lockTableName,
 				$sqlWhere,
-				array($this->_sharedLockCounterField => $counter - 1)
+				array($this->sharedLockCounterField => $counter - 1)
 			);
 		} else {
 			// delete where clause
-			$sqlWhere = $this->_lockTableName . '.' . $this->_hashTableField . '=' . $this->_getTypo3Db()->fullQuoteStr(
+			$sqlWhere = $this->lockTableName . '.' . $this->hashTableField . '=' . $this->getTypo3Db()->fullQuoteStr(
 					$this->getIdHash(),
-					$this->_lockTableName
+					$this->lockTableName
 				);
 
 			// execute delete
-			$this->_getTypo3Db()->exec_DELETEquery($this->_lockTableName, $sqlWhere);
+			$this->getTypo3Db()->exec_DELETEquery($this->lockTableName, $sqlWhere);
 
 			// return status
 		}
 
-		return $this->_getTypo3Db()->sql_affected_rows() ? TRUE : FALSE;
+		return $this->getTypo3Db()->sql_affected_rows() ? TRUE : FALSE;
 
 	}
 
@@ -249,29 +249,29 @@ class MysqlLockStrategy implements LockingStrategyInterface {
 	 * @param integer $mode
 	 * @return array
 	 */
-	protected function _getLockRecordFromDb($useMaxAgeClause = TRUE, $comparisonMaxAgeClause = '>=', $mode) {
+	protected function getLockRecordFromDb($useMaxAgeClause = TRUE, $comparisonMaxAgeClause = '>=', $mode) {
 		// prepare sql select array
 		$isSharedLock = $mode == self::LOCK_CAPABILITY_SHARED ? 1 : 0;
 		$sql = array();
-		$sql['table'] = $this->_lockTableName;
-		$sql['fields'] = $this->_lockTableName . '.' . $this->_hashTableField . ', ' .
-			$this->_lockTableName . '.' . $this->_createdAtTableField . ', ' .
-			$this->_lockTableName . '.' . $this->_isSharedLockField . ', ' .
-			$this->_lockTableName . '.' . $this->_sharedLockCounterField;
-		$sql['where'] = $this->_lockTableName . '.' . $this->_hashTableField . ' = ' . $this->_getTypo3Db()->fullQuoteStr(
+		$sql['table'] = $this->lockTableName;
+		$sql['fields'] = $this->lockTableName . '.' . $this->hashTableField . ', ' .
+			$this->lockTableName . '.' . $this->createdAtTableField . ', ' .
+			$this->lockTableName . '.' . $this->isSharedLockField . ', ' .
+			$this->lockTableName . '.' . $this->sharedLockCounterField;
+		$sql['where'] = $this->lockTableName . '.' . $this->hashTableField . ' = ' . $this->getTypo3Db()->fullQuoteStr(
 				$this->getIdHash(),
-				$this->_lockTableName
+				$this->lockTableName
 			);
 
 		if ($useMaxAgeClause) {
-			$sql['where'] .= ' AND ' . $this->_lockTableName . '.' . $this->_createdAtTableField . $comparisonMaxAgeClause . $this->_getMaxAge(
+			$sql['where'] .= ' AND ' . $this->lockTableName . '.' . $this->createdAtTableField . $comparisonMaxAgeClause . $this->getMaxAge(
 				);
 		}
 
-		$sql['where'] .= ' AND ' . $this->_lockTableName . '.' . $this->_isSharedLockField . ' = ' . $isSharedLock;
+		$sql['where'] .= ' AND ' . $this->lockTableName . '.' . $this->isSharedLockField . ' = ' . $isSharedLock;
 
 		// exec & return result
-		return $this->_getTypo3Db()->exec_SELECTgetSingleRow($sql['fields'], $sql['table'], $sql['where']);
+		return $this->getTypo3Db()->exec_SELECTgetSingleRow($sql['fields'], $sql['table'], $sql['where']);
 	}
 
 	/**
@@ -279,49 +279,49 @@ class MysqlLockStrategy implements LockingStrategyInterface {
 	 *
 	 * @return boolean TRUE, if records was persisted to db, otherwise false.
 	 */
-	protected function _insertLockRecordIntoDb() {
-		$row = $this->_getLockRecordFromDb(FALSE, '<', $this->lastUsedMode);
+	protected function insertLockRecordIntoDb() {
+		$row = $this->getLockRecordFromDb(FALSE, '<', $this->lastUsedMode);
 		// prepare array
 		$fields = array();
-		$fields[$this->_hashTableField] = $this->getIdHash();
-		$fields[$this->_createdAtTableField] = time();
-		$fields[$this->_isSharedLockField] = $this->lastUsedMode == self::LOCK_CAPABILITY_SHARED ? 1 : 0;
+		$fields[$this->hashTableField] = $this->getIdHash();
+		$fields[$this->createdAtTableField] = time();
+		$fields[$this->isSharedLockField] = $this->lastUsedMode == self::LOCK_CAPABILITY_SHARED ? 1 : 0;
 
 		if ($this->lastUsedMode == self::LOCK_CAPABILITY_SHARED) {
 			if ($row) {
 				//Only Update an existing lock
-				$fields[$this->_sharedLockCounterField] = (int)$row[$this->_sharedLockCounterField] + 1;
-				$sqlWhere = $this->_lockTableName . '.' . $this->_hashTableField . '=' . $this->_getTypo3Db()->fullQuoteStr(
+				$fields[$this->sharedLockCounterField] = (int)$row[$this->sharedLockCounterField] + 1;
+				$sqlWhere = $this->lockTableName . '.' . $this->hashTableField . '=' . $this->getTypo3Db()->fullQuoteStr(
 						$this->getIdHash(),
-						$this->_lockTableName
+						$this->lockTableName
 					);
-				$this->_saveTypo3DbDebugVar();
-				$this->_getTypo3Db()->exec_UPDATEquery(
-					$this->_lockTableName,
+				$this->saveTypo3DbDebugVar();
+				$this->getTypo3Db()->exec_UPDATEquery(
+					$this->lockTableName,
 					$sqlWhere,
-					array($this->_sharedLockCounterField => $fields[$this->_sharedLockCounterField])
+					array($this->sharedLockCounterField => $fields[$this->sharedLockCounterField])
 				);
-				$this->_restoreTypo3DbDebugVar();
+				$this->restoreTypo3DbDebugVar();
 			} else {
 				//New shared lock
 				// exec insert
-				$fields[$this->_sharedLockCounterField] = 1;
-				$this->_saveTypo3DbDebugVar();
-				$this->_getTypo3Db()->exec_INSERTquery($this->_lockTableName, $fields);
-				$this->_restoreTypo3DbDebugVar();
+				$fields[$this->sharedLockCounterField] = 1;
+				$this->saveTypo3DbDebugVar();
+				$this->getTypo3Db()->exec_INSERTquery($this->lockTableName, $fields);
+				$this->restoreTypo3DbDebugVar();
 			}
 			//Shared
 		} else {
 			//Exclusive Lock
-			$fields[$this->_sharedLockCounterField] = 0;
+			$fields[$this->sharedLockCounterField] = 0;
 			// exec insert
-			$this->_saveTypo3DbDebugVar();
-			$this->_getTypo3Db()->exec_INSERTquery($this->_lockTableName, $fields);
-			$this->_restoreTypo3DbDebugVar();
+			$this->saveTypo3DbDebugVar();
+			$this->getTypo3Db()->exec_INSERTquery($this->lockTableName, $fields);
+			$this->restoreTypo3DbDebugVar();
 		}
 
 		// return status
-		return ($this->_getTypo3Db()->sql_affected_rows() === 1) ? TRUE : FALSE;
+		return ($this->getTypo3Db()->sql_affected_rows() === 1) ? TRUE : FALSE;
 	}
 
 	/**
@@ -329,10 +329,10 @@ class MysqlLockStrategy implements LockingStrategyInterface {
 	 *
 	 * @return void
 	 */
-	protected function _saveTypo3DbDebugVar() {
-		if ($this->_getTypo3Db()->debugOutput == 1) {
-			$this->_typo3DbDebugVar = TRUE;
-			$this->_getTypo3Db()->debugOutput = FALSE;
+	protected function saveTypo3DbDebugVar() {
+		if ($this->getTypo3Db()->debugOutput == 1) {
+			$this->typo3DbDebugVar = TRUE;
+			$this->getTypo3Db()->debugOutput = FALSE;
 		}
 	}
 
@@ -341,10 +341,10 @@ class MysqlLockStrategy implements LockingStrategyInterface {
 	 *
 	 * @return void
 	 */
-	protected function _restoreTypo3DbDebugVar() {
-		if ($this->_typo3DbDebugVar) {
-			$this->_typo3DbDebugVar = FALSE;
-			$this->_getTypo3Db()->debugOutput = 1;
+	protected function restoreTypo3DbDebugVar() {
+		if ($this->typo3DbDebugVar) {
+			$this->typo3DbDebugVar = FALSE;
+			$this->getTypo3Db()->debugOutput = 1;
 		}
 	}
 
@@ -353,7 +353,7 @@ class MysqlLockStrategy implements LockingStrategyInterface {
 	 *
 	 * @return void
 	 */
-	protected function _waitForRetry() {
+	protected function waitForRetry() {
 		usleep($this->getRetryInterval() * 1000);
 	}
 
@@ -363,7 +363,7 @@ class MysqlLockStrategy implements LockingStrategyInterface {
 	 * @return int
 	 */
 	public function getRetries() {
-		return $this->_retries;
+		return $this->retries;
 	}
 
 	/**
@@ -372,7 +372,7 @@ class MysqlLockStrategy implements LockingStrategyInterface {
 	 * @return int
 	 */
 	public function getRetryInterval() {
-		return $this->_retryInterval;
+		return $this->retryInterval;
 	}
 
 	/**
@@ -380,7 +380,7 @@ class MysqlLockStrategy implements LockingStrategyInterface {
 	 *
 	 * @return integer
 	 */
-	protected function _getMaxAge() {
+	protected function getMaxAge() {
 		$maxExecutionTime = ini_get('max_execution_time');
 
 		return time() - ($maxExecutionTime ? $maxExecutionTime : 120);
