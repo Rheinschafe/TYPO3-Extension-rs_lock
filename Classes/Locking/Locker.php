@@ -75,6 +75,7 @@ class Locker {
 	public function __construct($id, $method, $loops = 0, $step = 0) {
 		$this->lockFactory = GeneralUtility::makeInstance("Rheinschafe\\RsLock\\Locking\\LockFactory");
 		$this->lockFactory->addLockingStrategy("Rheinschafe\\RsLock\\Locking\\Strategy\\MysqlLockStrategy");
+		$this->lockFactory->addLockingStrategy("Rheinschafe\\RsLock\\Locking\\Strategy\\RedisLockStrategy");
 
 		// Force ID to be string
 		$this->id = (string)$id;

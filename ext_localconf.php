@@ -22,3 +22,15 @@ if (!defined('TYPO3_MODE')) {
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Core\\Locking\\Locker'] = array(
 	'className' => 'Rheinschafe\\RsLock\\Locking\\Locker'
 );
+
+if (!is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['locking'])) {
+	$GLOBALS['TYPO3_CONF_VARS']['SYS']['locking'] = array();
+}
+
+if (!is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['locking']['lockingConfigurations'])) {
+	$GLOBALS['TYPO3_CONF_VARS']['SYS']['locking']['lockingConfigurations'] = array();
+}
+
+if (!is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['locking']['lockingConfigurations']['redis'])) {
+	$GLOBALS['TYPO3_CONF_VARS']['SYS']['locking']['lockingConfigurations']['redis'] = array();
+}
