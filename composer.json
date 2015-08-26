@@ -3,7 +3,7 @@
   "type": "typo3-cms-extension",
   "description": "Features TYPO3 with an advanced and rewritten locking. TYPO3 offers locking methods are: simple (is_file method), flock (filesystem locking attributes) and semaphore (System V IPC Key). These three drivers are rewritten into an adaptive driver api to boost performance and abstraction. There is also a new driver for MySQL Locking through an InnoDB table called 'sys_lock'. Very extendable structure, even if this is an really really initial version. Try & Fail :-)",
   "homepage": "https://www.rheinschafe.de/",
-  "license": ["GPL-2.0+"],
+  "license": "GPL-2.0+",
   "keywords": [
     "TYPO3 CMS",
     "locking"
