@@ -11,6 +11,11 @@
   "support": {
     "issues": "https://github.com/Rheinschafe/TYPO3-Extension-rs_lock/issues"
   },
+  "autoload": {
+    "psr-4": {
+      "Rheinschafe\\RsLock\\": "Classes/"
+    }
+  },
   "version": "2.0.0",
   "require": {
     "php": ">=5.3.7",
