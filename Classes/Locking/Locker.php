@@ -74,6 +74,12 @@ class Locker extends CoreLocker {
 	 * @throws \InvalidArgumentException
 	 */
 	public function __construct($id, $method, $loops = 0, $step = 0) {
+		if ( isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['enableLockLogging'] ) ){
+			$this->setEnableLogging( (boolean)$GLOBALS['TYPO3_CONF_VARS']['SYS']['enableLockLogging'] );
+		}else {
+			$this->setEnableLogging( FALSE );
+		}
+
 		$this->lockFactory = GeneralUtility::makeInstance("Rheinschafe\\RsLock\\Locking\\LockFactory");
 		$this->lockFactory->addLockingStrategy("Rheinschafe\\RsLock\\Locking\\Strategy\\MysqlLockStrategy");
 
@@ -136,6 +142,7 @@ class Locker extends CoreLocker {
 	 * @return bool
 	 */
 	protected function acquireLock($type) {
+		$this->sysLog('LockTypeId'.$type);
 		if (!$this->lockObject) {
 			$this->lockObject = $this->lockFactory->createLocker($this->id, $type);
 		}
@@ -242,7 +249,7 @@ class Locker extends CoreLocker {
 		}
 		GeneralUtility::sysLog(
 			'[' . get_class($this->lockObject) . ' : ' . $this->getId() . '] ' . $message,
-			$this->syslogFacility,
+			'rs_lock',
 			$severity
 		);
 	}
