@@ -247,8 +247,17 @@ class Locker extends CoreLocker {
 		if (!$this->isLoggingEnabled) {
 			return;
 		}
+		$trace = debug_backtrace();
+		if (isset($trace[3])) {
+			$caller = $trace[3]['file'];
+		}elseif ( isset($trace[2]) ) {
+			$caller = $trace[2]['file'];
+		}else{
+			$caller = '';
+		}
+
 		GeneralUtility::sysLog(
-			'[' . get_class($this->lockObject) . ' : ' . $this->getId() . '] ' . $message,
+			'[' . get_class($this->lockObject) . ' : ' . $this->getId() . '] ' . $message .' - Caller: ' .$caller,
 			'rs_lock',
 			$severity
 		);
