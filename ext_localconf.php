@@ -32,5 +32,7 @@ if (!is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['locking']['lockingConfiguratio
 }
 
 if (!is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['locking']['lockingConfigurations']['redis'])) {
-	$GLOBALS['TYPO3_CONF_VARS']['SYS']['locking']['lockingConfigurations']['redis'] = array();
+	$GLOBALS['TYPO3_CONF_VARS']['SYS']['locking']['lockingConfigurations']['redis'] = array(
+		'enable' => FALSE
+	);
 }

@@ -173,7 +173,10 @@ class RedisLockStrategy implements LockingStrategyInterface {
 	 * @return int LOCK_CAPABILITY_* elements combined with bit-wise OR
 	 */
 	static public function getCapabilities() {
-		if (!extension_loaded('redis')) {
+		if (!extension_loaded('redis')
+			|| !isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['locking']['lockingConfigurations']['redis']['enable'])
+			|| !$GLOBALS['TYPO3_CONF_VARS']['SYS']['locking']['lockingConfigurations']['redis']['enable']
+		) {
 			return 0;
 		}
 
