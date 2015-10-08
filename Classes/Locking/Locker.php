@@ -73,7 +73,7 @@ class Locker extends CoreLocker {
 	 * @throws \RuntimeException
 	 * @throws \InvalidArgumentException
 	 */
-	public function __construct($id, $method, $loops = 0, $step = 0) {
+	public function __construct($id, $method = NULL, $loops = 0, $step = 0) {
 		if ( isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['enableLockLogging'] ) ){
 			$this->setEnableLogging( (boolean)$GLOBALS['TYPO3_CONF_VARS']['SYS']['enableLockLogging'] );
 		}else {
