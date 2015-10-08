@@ -253,12 +253,11 @@ LUA;
 	 * @return bool Returns TRUE on success or FALSE on failure
 	 */
 	public function release() {
-		if ($this->isAcquired) {
-			if (!$this->connected) {
-				$this->connect();
-			}
+		if (!$this->isAcquired) {
+			return TRUE;
+		}
 
-			$strLuaUnlockScript = <<<LUA
+		$strLuaUnlockScript = <<<LUA
 --
 -- Release a lock
 --
@@ -268,15 +267,10 @@ local key   = ARGV[1]
 return redis.call("DEL", key)
 LUA;
 
-			$succeed = (bool)$this->redis->eval($strLuaUnlockScript, array($this->id));
-			if ($succeed) {
-				$this->isAcquired = FALSE;
+		$succeed = (bool)$this->redis->eval($strLuaUnlockScript, array($this->id));
+		$this->isAcquired = FALSE;
 
-				return TRUE;
-			}
-		}
-
-		return FALSE;
+		return $succeed;
 	}
 
 	/**
