@@ -9,7 +9,6 @@ namespace Rheinschafe\RsLock\Locking;
  * LICENSE.md file that was distributed with this source code.
  */
 
-use Rheinschafe\RsLock\Locking\Exception\LockAdapterException;
 use Rheinschafe\RsLock\Locking\Strategy\LockingStrategyInterface;
 use TYPO3\CMS\Core\Locking\Locker as CoreLocker;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -159,11 +158,10 @@ class Locker extends CoreLocker {
 	 * Release the lock
 	 *
 	 * @return bool Returns TRUE on success or FALSE on failure
-	 * @throws LockAdapterException
 	 */
 	public function release() {
 		if (!$this->lockObject) {
-			throw new LockAdapterException("Tried to release lock, but adapter was not ready");
+			return FALSE;
 		}
 
 		return $this->lockObject->release();
