@@ -39,6 +39,8 @@ class LockFactory implements SingletonInterface {
 		"Rheinschafe\\RsLock\\Locking\\Strategy\\SemaphoreLockStrategy" => TRUE,
 		"Rheinschafe\\RsLock\\Locking\\Strategy\\FileLockStrategy"      => TRUE,
 		"Rheinschafe\\RsLock\\Locking\\Strategy\\SimpleLockStrategy"    => TRUE,
+		"Rheinschafe\\RsLock\\Locking\\Strategy\\MysqlLockStrategy"     => TRUE,
+		"Rheinschafe\\RsLock\\Locking\\Strategy\\RedisLockStrategy"     => TRUE,
 	);
 
 	/**
