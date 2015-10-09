@@ -85,7 +85,6 @@ class Locker extends CoreLocker {
 			$this->step = (int)$step;
 		}
 		$this->method = $method;
-
 	}
 
 	/**
@@ -135,7 +134,7 @@ class Locker extends CoreLocker {
 	 * @return bool
 	 */
 	protected function acquireLock($type) {
-		$this->sysLog('LockTypeId'.$type);
+		$this->sysLog('LockTypeId' . $type);
 		if (!$this->lockObject) {
 			$this->lockObject = $this->lockFactory->createLocker($this->id, $type);
 		}
@@ -243,14 +242,14 @@ class Locker extends CoreLocker {
 		$trace = debug_backtrace();
 		if (isset($trace[3])) {
 			$caller = $trace[3]['file'];
-		}elseif ( isset($trace[2]) ) {
+		} elseif (isset($trace[2])) {
 			$caller = $trace[2]['file'];
-		}else{
+		} else {
 			$caller = '';
 		}
 
 		GeneralUtility::sysLog(
-			'[' . get_class($this->lockObject) . ' : ' . $this->getId() . '] ' . $message .' - Caller: ' .$caller,
+			'[' . get_class($this->lockObject) . ' : ' . $this->getId() . '] ' . $message . ' - Caller: ' . $caller,
 			'rs_lock',
 			$severity
 		);
