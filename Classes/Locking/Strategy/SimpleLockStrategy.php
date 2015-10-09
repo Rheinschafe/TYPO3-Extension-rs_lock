@@ -30,7 +30,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * Simple file locking
  */
-class SimpleLockStrategy implements LockingStrategyInterface {
+class SimpleLockStrategy extends AbstractLockStrategy implements LockingStrategyInterface {
 
 	const FILE_LOCK_FOLDER = 'typo3temp/locks/';
 
@@ -38,11 +38,6 @@ class SimpleLockStrategy implements LockingStrategyInterface {
 	 * @var string File path used for this lock
 	 */
 	protected $filePath;
-
-	/**
-	 * @var bool True if lock is acquired
-	 */
-	protected $isAcquired = FALSE;
 
 	/**
 	 * @var int Number of times a locked resource is tried to be acquired. Only used in manual locks method "simple".
@@ -60,6 +55,7 @@ class SimpleLockStrategy implements LockingStrategyInterface {
 	 * @throws LockCreateException if the lock could not be created
 	 */
 	public function __construct($subject) {
+		parent::__construct($subject);
 		// Tests if the directory for simple locks is available.
 		// If not, the directory will be created. The lock path is usually
 		// below typo3temp, typo3temp itself should exist already
@@ -119,15 +115,6 @@ class SimpleLockStrategy implements LockingStrategyInterface {
 		$this->isAcquired = FALSE;
 
 		return $success;
-	}
-
-	/**
-	 * Get status of this lock
-	 *
-	 * @return bool Returns TRUE if lock is acquired by this locker, FALSE otherwise
-	 */
-	public function isAcquired() {
-		return $this->isAcquired;
 	}
 
 	/**

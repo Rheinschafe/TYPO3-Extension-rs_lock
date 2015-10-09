@@ -31,7 +31,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * flock() locking
  */
-class FileLockStrategy implements LockingStrategyInterface {
+class FileLockStrategy extends AbstractLockStrategy implements LockingStrategyInterface {
 
 	const FILE_LOCK_FOLDER = 'typo3temp/locks/';
 
@@ -46,15 +46,11 @@ class FileLockStrategy implements LockingStrategyInterface {
 	protected $filePath;
 
 	/**
-	 * @var bool True if lock is acquired
-	 */
-	protected $isAcquired = FALSE;
-
-	/**
 	 * @param string $subject ID to identify this lock in the system
 	 * @throws LockCreateException if the lock could not be created
 	 */
 	public function __construct($subject) {
+		parent::__construct($subject);
 		/*
 		 * Tests if the directory for simple locks is available.
 		 * If not, the directory will be created. The lock path is usually
@@ -136,15 +132,6 @@ class FileLockStrategy implements LockingStrategyInterface {
 		$this->isAcquired = FALSE;
 
 		return $success;
-	}
-
-	/**
-	 * Get status of this lock
-	 *
-	 * @return bool Returns TRUE if lock is acquired by this locker, FALSE otherwise
-	 */
-	public function isAcquired() {
-		return $this->isAcquired;
 	}
 
 	/**

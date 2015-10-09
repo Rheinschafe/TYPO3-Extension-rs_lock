@@ -13,7 +13,7 @@ use Rheinschafe\RsLock\Locking\Exception\LockAcquireException;
 use Rheinschafe\RsLock\Locking\Exception\LockAcquireWouldBlockException;
 use Rheinschafe\RsLock\Locking\Exception\LockCreateException;
 
-class RedisLockStrategy implements LockingStrategyInterface {
+class RedisLockStrategy extends AbstractLockStrategy implements LockingStrategyInterface {
 
 	/**
 	 * Unique identifier for locking
@@ -21,13 +21,6 @@ class RedisLockStrategy implements LockingStrategyInterface {
 	 * @var string
 	 */
 	protected $id;
-
-	/**
-	 * True if lock is acquired
-	 *
-	 * @var bool
-	 */
-	protected $isAcquired = FALSE;
 
 	/**
 	 * Instance of the PHP redis class
@@ -90,6 +83,7 @@ class RedisLockStrategy implements LockingStrategyInterface {
 	 * @throws LockCreateException if the lock could not be created
 	 */
 	public function __construct($subject) {
+		parent::__construct($subject);
 		if (!extension_loaded('redis')) {
 			throw new LockCreateException(
 				'The PHP extension "redis" must be installed and loaded in order to use the redis locking strategy.', 1444304485
@@ -285,15 +279,6 @@ LUA;
 	public function __destruct() {
 		$this->release();
 		$this->disconnect();
-	}
-
-	/**
-	 * Get status of this lock
-	 *
-	 * @return bool Returns TRUE if lock is acquired by this locker, FALSE otherwise
-	 */
-	public function isAcquired() {
-		return $this->isAcquired;
 	}
 
 	/**

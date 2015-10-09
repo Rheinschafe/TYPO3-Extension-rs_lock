@@ -14,7 +14,7 @@ use Rheinschafe\RsLock\Locking\Exception\LockAcquireWouldBlockException;
 use Rheinschafe\RsLock\Locking\Exception\LockCreateException;
 use TYPO3\CMS\Core\Database\DatabaseConnection;
 
-class MysqlLockStrategy implements LockingStrategyInterface {
+class MysqlLockStrategy extends AbstractLockStrategy implements LockingStrategyInterface {
 
 	/**
 	 * Lock table name.
@@ -52,11 +52,6 @@ class MysqlLockStrategy implements LockingStrategyInterface {
 	protected $sharedLockCounterField = 'shared_lock_counter';
 
 	/**
-	 * @var bool True if lock is acquired
-	 */
-	protected $isAcquired = FALSE;
-
-	/**
 	 * @var boolean
 	 */
 	private $typo3DbDebugVar = FALSE;
@@ -76,11 +71,6 @@ class MysqlLockStrategy implements LockingStrategyInterface {
 	protected $retryInterval = 100;
 
 	/**
-	 * @var string subject
-	 */
-	protected $subject = "";
-
-	/**
 	 * @var string id
 	 */
 	protected $id = "";
@@ -95,7 +85,7 @@ class MysqlLockStrategy implements LockingStrategyInterface {
 	 * @throws LockCreateException if the lock could not be created
 	 */
 	public function __construct($subject) {
-		$this->subject = $subject;
+		parent::__construct($subject);
 		$this->id = 'mysql_' . md5((string)$this->subject);
 	}
 
@@ -168,15 +158,6 @@ class MysqlLockStrategy implements LockingStrategyInterface {
 	 */
 	public function __destruct() {
 		$this->release();
-	}
-
-	/**
-	 * Get status of this lock
-	 *
-	 * @return bool Returns TRUE if lock is acquired by this locker, FALSE otherwise
-	 */
-	public function isAcquired() {
-		return $this->isAcquired;
 	}
 
 	/**

@@ -30,7 +30,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * Semaphore locking
  */
-class SemaphoreLockStrategy implements LockingStrategyInterface {
+class SemaphoreLockStrategy extends AbstractLockStrategy implements LockingStrategyInterface {
 
 	const FILE_LOCK_FOLDER = 'typo3temp/locks/';
 
@@ -50,15 +50,11 @@ class SemaphoreLockStrategy implements LockingStrategyInterface {
 	protected $filePath = '';
 
 	/**
-	 * @var bool TRUE if lock is acquired
-	 */
-	protected $isAcquired = FALSE;
-
-	/**
 	 * @param string $subject ID to identify this lock in the system
 	 * @throws LockCreateException
 	 */
 	public function __construct($subject) {
+		parent::__construct($subject);
 		$path = PATH_site . self::FILE_LOCK_FOLDER;
 		if (!is_dir($path)) {
 			// Not using mkdir_deep on purpose here, if typo3temp itself
@@ -103,15 +99,6 @@ class SemaphoreLockStrategy implements LockingStrategyInterface {
 		$this->isAcquired = FALSE;
 
 		return (bool)@sem_release($this->resource);
-	}
-
-	/**
-	 * Get status of this lock
-	 *
-	 * @return bool Returns TRUE if lock is acquired by this locker, FALSE otherwise
-	 */
-	public function isAcquired() {
-		return $this->isAcquired;
 	}
 
 	/**
