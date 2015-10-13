@@ -213,10 +213,10 @@ class RedisLockStrategy extends AbstractLockStrategy implements LockingStrategyI
 local key   = ARGV[1]
 local ttl   = ARGV[2]
 
-local lockSet = redis.call('setnx', key, '')
+local lockSet = redis.call('SETNX', key, '')
 
 if lockSet == 1 then
-  redis.call('pexpire', key, ttl)
+  redis.call('PEXPIRE', key, ttl)
 end
 
 return lockSet
